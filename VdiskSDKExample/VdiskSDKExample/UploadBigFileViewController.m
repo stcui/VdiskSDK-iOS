@@ -70,15 +70,9 @@
 - (void)dealloc {
     
     [_vdiskComplexUpload cancel];
-    [_vdiskComplexUpload release];
-    [_destPath release];
-    
-    [_progressView release];
-    [_progressLabel release];
-    [_imagePickerController release];
     
     
-    [super dealloc];
+    
 }
 
 - (void)viewDidLoad
@@ -108,7 +102,6 @@
         NSMutableData *emptyData = [[NSMutableData alloc] initWithLength:0];
         NSFileManager *fileManager = [NSFileManager defaultManager];
         [fileManager createFileAtPath:tmpPath contents:emptyData attributes:nil];
-        [emptyData release];
         
         NSFileHandle *theFileHandle = [NSFileHandle fileHandleForWritingAtPath:tmpPath];
         
@@ -135,7 +128,6 @@
             
             NSData *data = [[NSData alloc] initWithBytes:buffer length:length];
             [theFileHandle writeData:data];
-            [data release];
             offset += length;
         }
         
@@ -154,7 +146,7 @@
             [_uploadButton setTitle:@"Cancel Upload" forState:UIControlStateNormal];
             
             [_vdiskComplexUpload cancel];
-            [_vdiskComplexUpload release], _vdiskComplexUpload = nil;
+            _vdiskComplexUpload, _vdiskComplexUpload = nil;
             
             _vdiskComplexUpload = [[VdiskComplexUpload alloc] initWithFile:fileName fromPath:tmpPath toPath:@"/"];
             _vdiskComplexUpload.delegate = self;
@@ -175,7 +167,6 @@
     
     ALAssetsLibrary *assetslibrary = [[ALAssetsLibrary alloc] init];
     [assetslibrary assetForURL:referenceURL resultBlock:resultblock failureBlock:failureblock];
-    [assetslibrary release];
     
     [picker dismissModalViewControllerAnimated:YES];
     picker = nil;
@@ -229,7 +220,6 @@
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Upload success!" message:@"Please look at the metadata object" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
     
     [alertView show];
-    [alertView release];
     
     self.destPath = nil;
     [_uploadButton setEnabled:YES];
@@ -255,7 +245,6 @@
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"ERROR!!" message:[NSString stringWithFormat:@"Error!\n----------------\nerrno:%d\n%@\%@\n----------------", error.code, error.localizedDescription, [error userInfo]] delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
     
     [alertView show];
-    [alertView release];
     
     self.destPath = nil;
     [_uploadButton setEnabled:YES];

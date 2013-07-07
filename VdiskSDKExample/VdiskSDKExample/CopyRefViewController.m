@@ -33,14 +33,10 @@
 
 - (void)dealloc {
 
-    [_filePathTextField release];
-    [_createButton release];
     
     [_vdiskRestClient cancelAllRequests];
     [_vdiskRestClient setDelegate:nil];
-    [_vdiskRestClient release];
     
-    [super dealloc];
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -82,7 +78,6 @@
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Created!" message:[NSString stringWithFormat:@"copy_ref:%@\nhave been saved in your clipboard", copyRef] delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil];
     
     [alertView show];
-    [alertView release];
 }
 
 - (void)restClient:(VdiskRestClient *)restClient createCopyRefFailedWithError:(NSError *)error {
@@ -93,7 +88,6 @@
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"ERROR!!" message:[NSString stringWithFormat:@"Error!\n----------------\nerrno:%d\n%@\%@\n----------------", error.code, error.localizedDescription, [error userInfo]] delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
     
     [alertView show];
-    [alertView release];
 }
 
 

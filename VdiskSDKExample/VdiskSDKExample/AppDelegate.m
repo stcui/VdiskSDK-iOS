@@ -17,7 +17,7 @@
 //
 
 #import "AppDelegate.h"
-
+#import "Config.h"
 #import "RootViewController.h"
 #import "VdiskSDK.h"
 #import "CatalogViewController.h"
@@ -71,30 +71,22 @@
 @synthesize catalogNavigationController = _catalogNavigationController;
 //@synthesize weiboAccessToken = _weiboAccessToken;
 
-- (void)dealloc {
-    
-    [_window release];
-    [_navigationController release];
-    [_catalogNavigationController release];
-    //[_weiboAccessToken release];
-    [super dealloc];
-}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     //if use weibo access token
     //self.weiboAccessToken = @"2.00nIvFoBR8VVWB72dcdbe20eR7UhCC";
     
-    self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    RootViewController *rootViewController = [[[RootViewController alloc] initWithNibName:@"RootViewController" bundle:nil] autorelease];
+    RootViewController *rootViewController = [[RootViewController alloc] initWithNibName:@"RootViewController" bundle:nil];
     rootViewController.title = @"Link Vdisk";
-    self.navigationController = [[[UINavigationController alloc] initWithRootViewController:rootViewController] autorelease];
+    self.navigationController = [[UINavigationController alloc] initWithRootViewController:rootViewController];
     self.window.rootViewController = self.navigationController;
     [self.window makeKeyAndVisible];
     
     
-    SinaWeibo *sinaWeibo = [[[SinaWeibo alloc] initWithAppKey:kWeiboAppKey appSecret:kWeiboAppSecret appRedirectURI:kWeiboAppRedirectURI andDelegate:rootViewController] autorelease];
+    SinaWeibo *sinaWeibo = [[SinaWeibo alloc] initWithAppKey:kWeiboAppKey appSecret:kWeiboAppSecret appRedirectURI:kWeiboAppRedirectURI andDelegate:rootViewController];
     
     VdiskSession *session = [[VdiskSession alloc] initWithAppKey:kVdiskSDKDemoAppKey appSecret:kVdiskSDKDemoAppSecret appRoot:@"basic" sinaWeibo:sinaWeibo];
 	session.delegate = self;
@@ -102,7 +94,6 @@
     [session setRedirectURI:kVdiskSDKDemoAppRedirectURI];
     //session.udid = [[UIDevice currentDevice] uniqueIdentifier];
 	[VdiskSession setSharedSession:session];
-    [session release];
 	[VdiskComplexRequest setNetworkRequestDelegate:self];
     
     if ([session isLinked]) {
@@ -158,7 +149,7 @@
 
     if (!_catalogNavigationController) {
         
-        CatalogViewController *catalogViewController = [[[CatalogViewController alloc] initWithStyle:UITableViewStylePlain] autorelease];
+        CatalogViewController *catalogViewController = [[CatalogViewController alloc] initWithStyle:UITableViewStylePlain];
         _catalogNavigationController = [[UINavigationController alloc] initWithRootViewController:catalogViewController];
     }
     

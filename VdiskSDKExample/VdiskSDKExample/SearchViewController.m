@@ -45,13 +45,9 @@
     
     [_vdiskRestClient cancelAllRequests];
     [_vdiskRestClient setDelegate:nil];
-    [_vdiskRestClient release];
         
-    [_path release];
     
-    [_listData release];
     
-    [super dealloc];
 }
 
 - (void)viewDidLoad {
@@ -64,7 +60,6 @@
     [searchBar setAutocapitalizationType:UITextAutocapitalizationTypeNone];
     [searchBar sizeToFit];
     [self.tableView setTableHeaderView:searchBar];
-    [searchBar release];
     
     self.title = @"Search";
 }
@@ -83,7 +78,7 @@
     
     if (cell == nil) {
         
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     
     VdiskMetadata *metadata = (VdiskMetadata *)[self.listData objectAtIndex:indexPath.row];
@@ -95,7 +90,6 @@
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"y-MM-dd HH:mm:ss"];
     NSString *lastDateString = [formatter stringFromDate:metadata.lastModifiedDate];
-    [formatter release];
     
     cell.textLabel.text = metadata.filename;
     cell.detailTextLabel.text = [NSString stringWithFormat:@"%@, %@", lastDateString, metadata.humanReadableSize];
@@ -130,7 +124,6 @@
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"No results found" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
         
         [alertView show];
-        [alertView release];
     }
     [self.tableView reloadData];
 }
@@ -140,7 +133,6 @@
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"ERROR!!" message:[NSString stringWithFormat:@"Error!\n----------------\nerrno:%d\n%@\%@\n----------------", error.code, error.localizedDescription, [error userInfo]] delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
     
     [alertView show];
-    [alertView release];
 }
 
 @end

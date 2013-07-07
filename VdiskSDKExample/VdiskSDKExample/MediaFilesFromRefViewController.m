@@ -36,17 +36,12 @@
 
 - (void)dealloc {
     
-    [_loadFileButton release];
-    [_theCopyRefTextField release];
     
     [_vdiskRestClient cancelAllRequests];
     [_vdiskRestClient setDelegate:nil];
-    [_vdiskRestClient release];
     
     [_player stop];
-	[_player release];
     
-    [super dealloc];
 }
 
 
@@ -83,7 +78,6 @@
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Empty path" message:@"Please input the file path" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
         
         [alertView show];
-        [alertView release];
         
         return;
     }
@@ -102,7 +96,6 @@
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"ERROR!!" message:[NSString stringWithFormat:@"Error!\n----------------\nerrno:%d\n%@\%@\n----------------", error.code, error.localizedDescription, [error userInfo]] delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
     
     [alertView show];
-    [alertView release];
     
     [_loadFileButton setEnabled:YES];
     [_loadFileButton setTitle:@"Load file" forState:UIControlStateNormal];

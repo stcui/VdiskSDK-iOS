@@ -38,14 +38,8 @@
 
     [_vdiskRestClient cancelAllRequests];
     [_vdiskRestClient setDelegate:nil];
-    [_vdiskRestClient release];
     
-    [_progressView release];
-    [_progressLabel release];
-    [_loadFileButton release];
-    [_filePathTextField release];
     
-    [super dealloc];
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -79,7 +73,6 @@
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Empty path" message:@"Please input the file path" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
         
         [alertView show];
-        [alertView release];
         
         return;
     }
@@ -122,7 +115,6 @@
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Load success!" message:[NSString stringWithFormat:@"Please check the Path: %@", destPath] delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
     
     [alertView show];
-    [alertView release];
     
     //[_loadFileButton setEnabled:YES];
     [_loadFileButton setTitle:@"Load file" forState:UIControlStateNormal];
@@ -135,7 +127,6 @@
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Load metadata success!" message:@"Please check the metadata object" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
     
     [alertView show];
-    [alertView release];
     
     //[_loadFileButton setEnabled:YES];
     [_loadFileButton setTitle:@"Load file" forState:UIControlStateNormal];
@@ -158,7 +149,6 @@
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"ERROR!!" message:[NSString stringWithFormat:@"Error!\n----------------\nerrno:%d\n%@\%@\n----------------", error.code, error.localizedDescription, [error userInfo]] delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
     
     [alertView show];
-    [alertView release];
     
     //[_loadFileButton setEnabled:YES];
     [_loadFileButton setTitle:@"Load file" forState:UIControlStateNormal];

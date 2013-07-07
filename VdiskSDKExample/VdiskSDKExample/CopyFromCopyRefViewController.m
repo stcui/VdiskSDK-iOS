@@ -51,13 +51,8 @@
     
     [_vdiskRestClient cancelAllRequests];
     [_vdiskRestClient setDelegate:nil];
-    [_vdiskRestClient release];
     
-    [_theCopyRefTextField release];
-    [_destinationPathTextField release];
-    [_theCopyButton release];
     
-    [super dealloc];
 }
 
 - (IBAction)onCopyButtonPressed:(id)sender {
@@ -81,7 +76,6 @@
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Copy success!" message:@"Please check the VdiskMetadata object returned by success delegate" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
     
     [alertView show];
-    [alertView release];
 }
 
 - (void)restClient:(VdiskRestClient *)client copyFromRefFailedWithError:(NSError *)error {
@@ -92,7 +86,6 @@
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"ERROR!!" message:[NSString stringWithFormat:@"Error!\n----------------\nerrno:%d\n%@\%@\n----------------", error.code, error.localizedDescription, [error userInfo]] delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
     
     [alertView show];
-    [alertView release];
 }
 
 @end

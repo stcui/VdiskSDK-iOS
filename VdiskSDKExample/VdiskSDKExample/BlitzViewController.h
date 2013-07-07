@@ -11,7 +11,7 @@
 
 @interface BlitzViewController : UIViewController <VdiskRestClientDelegate>
 
-@property (nonatomic, retain) IBOutlet UIButton *blitzButton;
+@property (nonatomic, strong) IBOutlet UIButton *blitzButton;
 
 - (IBAction)blitzButtonPressed:(id)sender;
 

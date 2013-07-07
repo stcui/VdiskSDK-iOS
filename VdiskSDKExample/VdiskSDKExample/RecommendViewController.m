@@ -47,12 +47,9 @@
 
     [_vdiskRestClient cancelAllRequests];
     [_vdiskRestClient setDelegate:nil];
-    [_vdiskRestClient release];
-    
-    [_shareList release];
     
     
-    [super dealloc];
+    
 }
 
 - (id)initWithStyle:(UITableViewStyle)style {
@@ -76,9 +73,8 @@
 
     UIBarButtonItem *rightBtn = [[UIBarButtonItem alloc] initWithTitle:@"Reload" style:UIBarButtonItemStylePlain target:self action:@selector(onReloadButtonPressed:)];
     [self.navigationItem setRightBarButtonItem:rightBtn];
-    [rightBtn release];
     
-    self.navigationItem.backBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:nil action:nil] autorelease];
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:nil action:nil];
     
     [self onReloadButtonPressed:nil];
 }
@@ -104,7 +100,7 @@
     
     if (cell == nil) {
         
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     
     
@@ -117,7 +113,6 @@
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"y-MM-dd HH:mm:ss"];
     NSString *lastDateString = [formatter stringFromDate:metadata.lastModifiedDate];
-    [formatter release];
     
     cell.textLabel.text = metadata.filename;
     cell.detailTextLabel.text = [NSString stringWithFormat:@"%@, %@", lastDateString, metadata.humanReadableSize];
@@ -186,10 +181,10 @@
     
     if (_shareList != nil) {
         
-        [_shareList release], _shareList = nil;
+        _shareList = nil;
     }
     
-    _shareList = [shareList retain];
+    _shareList = shareList;
     
     [self.tableView reloadData];
 }
@@ -203,7 +198,6 @@
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"ERROR!!" message:[NSString stringWithFormat:@"Error!\n----------------\nerrno:%d\n%@\%@\n----------------", error.code, error.localizedDescription, [error userInfo]] delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
     
     [alertView show];
-    [alertView release];
 }
 
 

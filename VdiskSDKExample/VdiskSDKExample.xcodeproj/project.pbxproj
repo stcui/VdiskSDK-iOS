@@ -169,6 +169,7 @@
 		62E470031592CC860072D908 /* RestoreViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RestoreViewController.h; sourceTree = "<group>"; };
 		62E470041592CC860072D908 /* RestoreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RestoreViewController.m; sourceTree = "<group>"; };
 		62E470051592CC860072D908 /* RestoreViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RestoreViewController.xib; sourceTree = "<group>"; };
+		A0A280AA1789DC96001B37C9 /* Config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Config.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -207,6 +208,7 @@
 		3F5A37D1158F57A800E40E58 /* Example */ = {
 			isa = PBXGroup;
 			children = (
+				A0A280AA1789DC96001B37C9 /* Config.h */,
 				3FB1D0291590395C008B34AF /* ViewControllers */,
 				3FA19050158F469C002FF989 /* AppDelegate.h */,
 				3FA19051158F469C002FF989 /* AppDelegate.m */,
@@ -568,6 +570,7 @@
 		3FA1905C158F469C002FF989 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "VdiskSDKExample/VdiskSDKExample-Prefix.pch";
 				INFOPLIST_FILE = "VdiskSDKExample/VdiskSDKExample-Info.plist";
@@ -582,6 +585,7 @@
 		3FA1905D158F469C002FF989 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "VdiskSDKExample/VdiskSDKExample-Prefix.pch";
 				INFOPLIST_FILE = "VdiskSDKExample/VdiskSDKExample-Info.plist";

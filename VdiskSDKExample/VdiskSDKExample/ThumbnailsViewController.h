@@ -20,9 +20,9 @@
 
 @interface ThumbnailsViewController : UIViewController
 
-@property (nonatomic, retain) IBOutlet UIButton *loadThumbButton;
-@property (nonatomic, retain) IBOutlet UITextField *filePathTextField;
-@property (nonatomic, retain) IBOutlet UIImageView *imageView;
+@property (nonatomic, strong) IBOutlet UIButton *loadThumbButton;
+@property (nonatomic, strong) IBOutlet UITextField *filePathTextField;
+@property (nonatomic, strong) IBOutlet UIImageView *imageView;
 
 - (IBAction)onLoadThumbButtonPressed:(id)sender;
 

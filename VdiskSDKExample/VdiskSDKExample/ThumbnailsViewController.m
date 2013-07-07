@@ -34,15 +34,10 @@
 
 - (void)dealloc {
 
-    [_filePathTextField release];
-    [_loadThumbButton release];
-    [_imageView release];
     
     [_vdiskRestClient cancelAllRequests];
     [_vdiskRestClient setDelegate:nil];
-    [_vdiskRestClient release];
     
-    [super dealloc];
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -72,7 +67,6 @@
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Empty path" message:@"Please input the file path" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
         
         [alertView show];
-        [alertView release];
         
         return;
     }
@@ -108,7 +102,6 @@
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Load metadata success!" message:@"Please check the metadata object" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
     
     [alertView show];
-    [alertView release];
 }
 
 - (void)restClient:(VdiskRestClient *)client loadThumbnailFailedWithError:(NSError *)error {
@@ -116,7 +109,6 @@
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"ERROR!!" message:[NSString stringWithFormat:@"Error!\n----------------\nerrno:%d\n%@\%@\n----------------", error.code, error.localizedDescription, [error userInfo]] delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
     
     [alertView show];
-    [alertView release];
     
     [_loadThumbButton setEnabled:YES];
     [_loadThumbButton setTitle:@"Load thumbnail" forState:UIControlStateNormal];

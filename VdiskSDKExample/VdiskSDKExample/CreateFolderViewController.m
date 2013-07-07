@@ -39,12 +39,8 @@
     
     [_vdiskRestClient cancelAllRequests];
     [_vdiskRestClient setDelegate:nil];
-    [_vdiskRestClient release];
     
-    [_folderNameTextField release];
-    [_createFolderButton release];
     
-    [super dealloc];
 }
 
 - (IBAction)onCreateFolderButtonPressed:(id)sender {
@@ -67,7 +63,6 @@
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Create success!" message:@"Please check the VdiskMetadata object returned by success delegate" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
     
     [alertView show];
-    [alertView release];
 }
 
 - (void)restClient:(VdiskRestClient *)client createFolderFailedWithError:(NSError *)error {
@@ -78,7 +73,6 @@
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"ERROR!!" message:[NSString stringWithFormat:@"Error!\n----------------\nerrno:%d\n%@\%@\n----------------", error.code, error.localizedDescription, [error userInfo]] delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
     
     [alertView show];
-    [alertView release];
 }
 
 @end

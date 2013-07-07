@@ -35,9 +35,7 @@
 - (void)dealloc {
 
     [_client cancelAllRequests];
-    [_client release];
     
-    [super dealloc];
 }
 
 - (void)viewDidLoad {

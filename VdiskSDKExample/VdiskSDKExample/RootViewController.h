@@ -21,7 +21,7 @@
 
 @interface RootViewController : UIViewController <SinaWeiboDelegate>
 
-@property (nonatomic, retain) IBOutlet UISwitch *switcher;
+@property (nonatomic, strong) IBOutlet UISwitch *switcher;
 
 - (IBAction)onLinkButtionPressed;
 

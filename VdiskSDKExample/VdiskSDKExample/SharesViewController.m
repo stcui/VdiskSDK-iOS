@@ -38,12 +38,8 @@
     
     [_vdiskRestClient cancelAllRequests];
     [_vdiskRestClient setDelegate:nil];
-    [_vdiskRestClient release];
     
-    [_filePathTextField release];
-    [_createLinkButton release];
     
-    [super dealloc];
 }
 
 - (IBAction)onCreateLinkButtonPressed:(id)sender {
@@ -66,7 +62,6 @@
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:link delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Okay", nil];
     
     [alertView show];
-    [alertView release];
 }
 
 - (void)restClient:(VdiskRestClient *)restClient loadSharableLinkFailedWithError:(NSError *)error {
@@ -77,7 +72,6 @@
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"ERROR!!" message:[NSString stringWithFormat:@"Error!\n----------------\nerrno:%d\n%@\%@\n----------------", error.code, error.localizedDescription, [error userInfo]] delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
     
     [alertView show];
-    [alertView release];
 }
 
 #pragma mark - UIAlertView delegate

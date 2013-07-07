@@ -36,10 +36,7 @@
 - (void)dealloc {
 
     [_vdiskRestClient cancelAllRequests];
-    [_vdiskRestClient release];
-    [_blitzButton release];
     
-    [super dealloc];
 }
 
 - (void)viewDidLoad {

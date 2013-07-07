@@ -64,11 +64,6 @@
     [_switcher addTarget:self action:@selector(onSwitcherChanged) forControlEvents:UIControlEventValueChanged];
 }
 
-- (void)dealloc {
-    
-    [_switcher release];
-    [super dealloc];
-}
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     

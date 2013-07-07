@@ -35,12 +35,8 @@
 
     [_restClient cancelAllRequests];
     _restClient.delegate = nil;
-    [_restClient release];
     
-    [_getAccountInfoButton release];
-    [_textView release];
     
-    [super dealloc];
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {

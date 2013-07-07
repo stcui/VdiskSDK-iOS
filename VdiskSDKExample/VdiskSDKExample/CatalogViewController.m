@@ -68,15 +68,13 @@
 
     UIBarButtonItem *rightBtn = [[UIBarButtonItem alloc] initWithTitle:@"Unlink" style:UIBarButtonItemStylePlain target:self action:@selector(onUnlinkButtonPressed:)];
     [self.navigationItem setRightBarButtonItem:rightBtn];
-    [rightBtn release];
     
     
     UIBarButtonItem *leftBtn = [[UIBarButtonItem alloc] initWithTitle:@"RefreshLink" style:UIBarButtonItemStylePlain target:self action:@selector(onRefreshLinkButtonPressed:)];
     [self.navigationItem setLeftBarButtonItem:leftBtn];
-    [leftBtn release];
     
     
-    self.navigationItem.backBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"Catalog" style:UIBarButtonItemStyleBordered target:nil action:nil] autorelease];
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Catalog" style:UIBarButtonItemStyleBordered target:nil action:nil];
 }
 
 - (void)viewDidUnload {
@@ -133,7 +131,7 @@
     
     if (cell == nil) {
         
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -296,7 +294,7 @@
         
         if (indexPath.row == 0) {
             
-            AccountInfoViewController *accountInfoViewController = [[[AccountInfoViewController alloc] initWithNibName:@"AccountInfoViewController" bundle:nil] autorelease];
+            AccountInfoViewController *accountInfoViewController = [[AccountInfoViewController alloc] initWithNibName:@"AccountInfoViewController" bundle:nil];
             [self.navigationController pushViewController:accountInfoViewController animated:YES];
         }
         
@@ -304,62 +302,62 @@
     
         if (indexPath.row == 0) {
             
-            UploadFileViewController *uploadFileViewController = [[[UploadFileViewController alloc] initWithNibName:@"UploadFileViewController" bundle:nil] autorelease];
+            UploadFileViewController *uploadFileViewController = [[UploadFileViewController alloc] initWithNibName:@"UploadFileViewController" bundle:nil];
             [self.navigationController pushViewController:uploadFileViewController animated:YES];
             
         } else if (indexPath.row == 1) {
             
-            LoadFileViewController *loadFileViewController = [[[LoadFileViewController alloc] initWithNibName:@"LoadFileViewController" bundle:nil] autorelease];
+            LoadFileViewController *loadFileViewController = [[LoadFileViewController alloc] initWithNibName:@"LoadFileViewController" bundle:nil];
             [self.navigationController pushViewController:loadFileViewController animated:YES];
             
         } else if (indexPath.row == 2) {
             
-            MetadataViewController *metadataViewController = [[[MetadataViewController alloc] initWithStyle:UITableViewStylePlain] autorelease];
+            MetadataViewController *metadataViewController = [[MetadataViewController alloc] initWithStyle:UITableViewStylePlain];
             [self.navigationController pushViewController:metadataViewController animated:YES];
             
         } else if (indexPath.row == 3) {
             
-            RevisionsViewController *revisionsViewController = [[[RevisionsViewController alloc] initWithNibName:@"RevisionsViewController" bundle:nil] autorelease];
+            RevisionsViewController *revisionsViewController = [[RevisionsViewController alloc] initWithNibName:@"RevisionsViewController" bundle:nil];
             [self.navigationController pushViewController:revisionsViewController animated:YES];
 
         } else if (indexPath.row == 4) {
             
-            RestoreViewController *restoreViewController = [[[RestoreViewController alloc] initWithNibName:@"RestoreViewController" bundle:nil] autorelease];
+            RestoreViewController *restoreViewController = [[RestoreViewController alloc] initWithNibName:@"RestoreViewController" bundle:nil];
             [self.navigationController pushViewController:restoreViewController animated:YES];
             
         } else if (indexPath.row == 5) {
             
-            SearchViewController *searchViewController = [[[SearchViewController alloc] initWithStyle:UITableViewStylePlain] autorelease];
+            SearchViewController *searchViewController = [[SearchViewController alloc] initWithStyle:UITableViewStylePlain];
             [self.navigationController pushViewController:searchViewController animated:YES];
             
         } else if (indexPath.row == 6) {
             
-            SharesViewController *shareViewController = [[[SharesViewController alloc] initWithNibName:@"SharesViewController" bundle:nil] autorelease];
+            SharesViewController *shareViewController = [[SharesViewController alloc] initWithNibName:@"SharesViewController" bundle:nil];
             [self.navigationController pushViewController:shareViewController animated:YES];
         
         } else if (indexPath.row == 7) {
         
-            ThumbnailsViewController *thumbnailsViewController = [[[ThumbnailsViewController alloc] initWithNibName:@"ThumbnailsViewController" bundle:nil] autorelease];
+            ThumbnailsViewController *thumbnailsViewController = [[ThumbnailsViewController alloc] initWithNibName:@"ThumbnailsViewController" bundle:nil];
             [self.navigationController pushViewController:thumbnailsViewController animated:YES];
             
         } else if (indexPath.row == 8) {
             
-            MediaFilesViewControllerViewController *mediaFilesViewControllerViewController = [[[MediaFilesViewControllerViewController alloc] initWithNibName:@"MediaFilesViewControllerViewController" bundle:nil] autorelease];
+            MediaFilesViewControllerViewController *mediaFilesViewControllerViewController = [[MediaFilesViewControllerViewController alloc] initWithNibName:@"MediaFilesViewControllerViewController" bundle:nil];
             [self.navigationController pushViewController:mediaFilesViewControllerViewController animated:YES];
             
         } else if (indexPath.row == 9) {
             
-            CopyRefViewController *copyRefViewController = [[[CopyRefViewController alloc] initWithNibName:@"CopyRefViewController" bundle:nil] autorelease];
+            CopyRefViewController *copyRefViewController = [[CopyRefViewController alloc] initWithNibName:@"CopyRefViewController" bundle:nil];
             [self.navigationController pushViewController:copyRefViewController animated:YES];
             
         } else if (indexPath.row == 10) {
             
-            UploadBigFileViewController *uploadBigFileViewController = [[[UploadBigFileViewController alloc] initWithNibName:@"UploadBigFileViewController" bundle:nil] autorelease];
+            UploadBigFileViewController *uploadBigFileViewController = [[UploadBigFileViewController alloc] initWithNibName:@"UploadBigFileViewController" bundle:nil];
             [self.navigationController pushViewController:uploadBigFileViewController animated:YES];
             
         } else if (indexPath.row == 11) {
             
-            BlitzViewController *blitzViewController = [[[BlitzViewController alloc] initWithNibName:@"BlitzViewController" bundle:nil] autorelease];
+            BlitzViewController *blitzViewController = [[BlitzViewController alloc] initWithNibName:@"BlitzViewController" bundle:nil];
             [self.navigationController pushViewController:blitzViewController animated:YES];
         }
         
@@ -367,27 +365,27 @@
     
         if (indexPath.row == 0) {
             
-            CopyViewController *copyViewController = [[[CopyViewController alloc] initWithNibName:@"CopyViewController" bundle:nil] autorelease];
+            CopyViewController *copyViewController = [[CopyViewController alloc] initWithNibName:@"CopyViewController" bundle:nil];
             [self.navigationController pushViewController:copyViewController animated:YES];
             
         } else if (indexPath.row == 1) {
             
-            CopyFromCopyRefViewController *copyFromCopyRefViewController = [[[CopyFromCopyRefViewController alloc] initWithNibName:@"CopyFromCopyRefViewController" bundle:nil] autorelease];
+            CopyFromCopyRefViewController *copyFromCopyRefViewController = [[CopyFromCopyRefViewController alloc] initWithNibName:@"CopyFromCopyRefViewController" bundle:nil];
             [self.navigationController pushViewController:copyFromCopyRefViewController animated:YES];
             
         } else if (indexPath.row == 2) {
             
-            CreateFolderViewController *createFolderViewController = [[[CreateFolderViewController alloc] initWithNibName:@"CreateFolderViewController" bundle:nil] autorelease];
+            CreateFolderViewController *createFolderViewController = [[CreateFolderViewController alloc] initWithNibName:@"CreateFolderViewController" bundle:nil];
             [self.navigationController pushViewController:createFolderViewController animated:YES];
             
         } else if (indexPath.row == 3) {
             
-            DeleteViewController *deleteViewController = [[[DeleteViewController alloc] initWithNibName:@"DeleteViewController" bundle:nil] autorelease];
+            DeleteViewController *deleteViewController = [[DeleteViewController alloc] initWithNibName:@"DeleteViewController" bundle:nil];
             [self.navigationController pushViewController:deleteViewController animated:YES];
             
         } else if (indexPath.row == 4) {
             
-            MoveViewController *moveViewController = [[[MoveViewController alloc] initWithNibName:@"MoveViewController" bundle:nil] autorelease];
+            MoveViewController *moveViewController = [[MoveViewController alloc] initWithNibName:@"MoveViewController" bundle:nil];
             [self.navigationController pushViewController:moveViewController animated:YES];
         }
         
@@ -395,7 +393,7 @@
         
         if (indexPath.row == 0) {
             
-            MediaFilesFromRefViewController *mediaFilesFromRefViewController = [[[MediaFilesFromRefViewController alloc] initWithNibName:@"MediaFilesFromRefViewController" bundle:nil] autorelease];
+            MediaFilesFromRefViewController *mediaFilesFromRefViewController = [[MediaFilesFromRefViewController alloc] initWithNibName:@"MediaFilesFromRefViewController" bundle:nil];
             [self.navigationController pushViewController:mediaFilesFromRefViewController animated:YES];
             
         } else if (indexPath.row == 1) {
@@ -407,12 +405,12 @@
         
         if (indexPath.row == 0) {
             
-            RecommendViewController *recommendViewController = [[[RecommendViewController alloc] init] autorelease];
+            RecommendViewController *recommendViewController = [[RecommendViewController alloc] init];
             [self.navigationController pushViewController:recommendViewController animated:YES];
             
         } else if (indexPath.row == 1) {
             
-            ShareFileToFriendsViewController *shareFileToFriendsViewController = [[[ShareFileToFriendsViewController alloc] initWithNibName:@"ShareFileToFriendsViewController" bundle:nil] autorelease];
+            ShareFileToFriendsViewController *shareFileToFriendsViewController = [[ShareFileToFriendsViewController alloc] initWithNibName:@"ShareFileToFriendsViewController" bundle:nil];
             
             [self.navigationController pushViewController:shareFileToFriendsViewController animated:YES];
             

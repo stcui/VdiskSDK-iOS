@@ -34,16 +34,11 @@
 
 - (void)dealloc {
 
-    [_loadButton release];
-    [_filePathTextField release];
     
     [_vdiskRestClient cancelAllRequests];
     [_vdiskRestClient setDelegate:nil];
-    [_vdiskRestClient release];
     
-    [_revisions release];
     
-    [super dealloc];
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -71,7 +66,6 @@
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Empty path" message:@"Please input the file path" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
         
         [alertView show];
-        [alertView release];
         
         return;
     }
@@ -89,10 +83,10 @@
 
     if (_revisions != nil) {
         
-        [_revisions release], _revisions = nil;
+        _revisions = nil;
     }
     
-    _revisions = [[NSMutableArray arrayWithArray:revisions] retain];
+    _revisions = [NSMutableArray arrayWithArray:revisions];
     
     [self.tableView reloadData];
     
@@ -105,7 +99,6 @@
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"ERROR!!" message:[NSString stringWithFormat:@"Error!\n----------------\nerrno:%d\n%@\%@\n----------------", error.code, error.localizedDescription, [error userInfo]] delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
     
     [alertView show];
-    [alertView release];
     
     [_loadButton setEnabled:YES];
     [_loadButton setTitle:@"Load revisions" forState:UIControlStateNormal];
@@ -132,7 +125,7 @@
     
     if (cell == nil) {
         
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     
     [cell setUserInteractionEnabled:NO];
@@ -145,7 +138,6 @@
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"y-MM-dd HH:mm:ss"];
     NSString *lastDateString = [formatter stringFromDate:metadata.lastModifiedDate];
-    [formatter release];
     
     cell.textLabel.text = [NSString stringWithFormat:@"%@(rev:%@)", metadata.filename, metadata.rev];
     cell.detailTextLabel.text = lastDateString;

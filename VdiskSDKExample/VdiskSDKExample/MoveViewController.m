@@ -39,13 +39,8 @@
     
     [_vdiskRestClient cancelAllRequests];
     [_vdiskRestClient setDelegate:nil];
-    [_vdiskRestClient release];
     
-    [_sourcePathTextField release];
-    [_destinationPathTextField release];
-    [_moveButton release];
     
-    [super dealloc];
 }
 
 - (IBAction)onMoveButtonPressed:(id)sender {
@@ -70,7 +65,6 @@
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Move success!" message:@"Please check the VdiskMetadata object returned by success delegate" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
     
     [alertView show];
-    [alertView release];
 }
 
 - (void)restClient:(VdiskRestClient *)client movePathFailedWithError:(NSError *)error {
@@ -81,7 +75,6 @@
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"ERROR!!" message:[NSString stringWithFormat:@"Error!\n----------------\nerrno:%d\n%@\%@\n----------------", error.code, error.localizedDescription, [error userInfo]] delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
     
     [alertView show];
-    [alertView release];
 }
 
 @end
