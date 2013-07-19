@@ -26,7 +26,7 @@
 #import "VdiskComplexRequest.h"
 #import "VdiskSDKGlobal.h"
 #import "VdiskUtil.h"
-#import "VdiskJSON.h"
+#import "JSONKit.h"
 #import "ASIFormDataRequest.h"
 #import "VdiskSharesMetadata.h"
 

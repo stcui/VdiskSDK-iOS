@@ -17,7 +17,7 @@
 //
 
 #import "VdiskComplexRequest.h"
-#import "VdiskJSON.h"
+#import "JSONKit.h"
 #import "VdiskError.h"
 #import "VdiskLog.h"
 #import "DDLog.h"
@@ -197,9 +197,8 @@ id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
     return [_request responseString];
 }
 
-- (NSObject *)resultJSON {
-    
-    return [[self resultString] JSONValue];
+- (id)resultJSON {
+    return [[_request responseData] objectFromJSONData];
 } 
 
 - (NSInteger)statusCode {
@@ -539,13 +538,9 @@ id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
         if ([resultString length] > 0) {
             
             @try {
-                
-                VdiskJsonParser *jsonParser = [VdiskJsonParser new];
-                NSObject *resultJSON = [jsonParser objectWithString:resultString];
-                [jsonParser release];
-                
+                id resultJSON = [self resultJSON];
+
                 if ([resultJSON isKindOfClass:[NSDictionary class]]) {
-                    
                     [errorUserInfo addEntriesFromDictionary:(NSDictionary *)resultJSON];
                 }
                 

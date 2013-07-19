@@ -18,7 +18,7 @@
 
 #import "VdiskSession.h"
 #import "VdiskAccountInfo.h"
-#import "VdiskJSON.h"
+#import "JSONKit.h"
 
 int ddLogLevel;
 
@@ -122,7 +122,7 @@ static VdiskSession *kVdiskSharedSession = nil;
                                           expiresString, @"expires",
                                           sign, @"sign", nil];
         
-        NSString *authorization = [authorizationDic JSONRepresentation];
+        NSString *authorization = [authorizationDic JSONString];
         
         requestHeaders = [NSDictionary dictionaryWithObjectsAndKeys:
                           [VdiskSession userAgent], @"User-Agent",

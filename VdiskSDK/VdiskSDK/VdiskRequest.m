@@ -18,7 +18,7 @@
 
 #import "VdiskRequest.h"
 #import "VdiskUtil.h"
-#import "VdiskJSON.h"
+#import "JSONKit.h"
 #import "VdiskSDKGlobal.h"
 #import "VdiskError.h"
 #import "ASIDownloadCache.h"
@@ -292,24 +292,15 @@
 }
 
 - (id)parseJSONData:(NSData *)data error:(NSError **)error {
-	
-	NSString *dataString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-	VdiskJSON *jsonParser = [[VdiskJSON alloc]init];
-	
 	NSError *parseError = nil;
-	id result = [jsonParser objectWithString:dataString error:&parseError];
-	
+	id result = [data objectFromJSONDataWithParseOptions:JKParseOptionLooseUnicode error:&parseError];
+    
 	if (parseError) {
-        
         if (error != nil) {
-            
             //*error = [self errorWithCode:kVdiskErrorCodeSDK userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%d", kVdiskSDKErrorCodeParseError] forKey:kVdiskSDKErrorCodeKey]];
             *error = [self errorWithCode:kVdiskErrorInvalidResponse userInfo:@{@"errorMessage":[[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease]}];
         }
 	}
-    
-	[dataString release];
-	[jsonParser release];
 	
 	if ([result isKindOfClass:[NSDictionary class]]) {
         

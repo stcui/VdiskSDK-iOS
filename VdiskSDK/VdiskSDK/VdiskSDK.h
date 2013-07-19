@@ -16,7 +16,6 @@
 //  Copyright (c) 2012 Sina Vdisk. All rights reserved.
 //
 
-#import "VdiskJSON.h"
 #import "VdiskRequest.h"
 #import "VdiskAuthorize.h"
 #import "VdiskKeychain.h"

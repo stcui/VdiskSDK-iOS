@@ -66,18 +66,6 @@
 		3FA19008158F44C8002FF989 /* VdiskSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA18FE8158F44C8002FF989 /* VdiskSession.m */; };
 		3FA19009158F44C8002FF989 /* VdiskUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FA18FE9158F44C8002FF989 /* VdiskUtil.h */; };
 		3FA1900A158F44C8002FF989 /* VdiskUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA18FEA158F44C8002FF989 /* VdiskUtil.m */; };
-		3FA1901C158F44D8002FF989 /* NSObject+VdiskJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FA1900C158F44D7002FF989 /* NSObject+VdiskJSON.h */; };
-		3FA1901D158F44D8002FF989 /* NSObject+VdiskJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA1900D158F44D7002FF989 /* NSObject+VdiskJSON.m */; };
-		3FA1901E158F44D8002FF989 /* NSString+VdiskJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FA1900E158F44D7002FF989 /* NSString+VdiskJSON.h */; };
-		3FA1901F158F44D8002FF989 /* NSString+VdiskJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA1900F158F44D8002FF989 /* NSString+VdiskJSON.m */; };
-		3FA19020158F44D8002FF989 /* VdiskJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FA19010158F44D8002FF989 /* VdiskJSON.h */; };
-		3FA19021158F44D8002FF989 /* VdiskJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA19011158F44D8002FF989 /* VdiskJSON.m */; };
-		3FA19022158F44D8002FF989 /* VdiskJsonBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FA19012158F44D8002FF989 /* VdiskJsonBase.h */; };
-		3FA19023158F44D8002FF989 /* VdiskJsonBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA19013158F44D8002FF989 /* VdiskJsonBase.m */; };
-		3FA19024158F44D8002FF989 /* VdiskJsonParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FA19014158F44D8002FF989 /* VdiskJsonParser.h */; };
-		3FA19025158F44D8002FF989 /* VdiskJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA19015158F44D8002FF989 /* VdiskJsonParser.m */; };
-		3FA19026158F44D8002FF989 /* VdiskJsonWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FA19016158F44D8002FF989 /* VdiskJsonWriter.h */; };
-		3FA19027158F44D8002FF989 /* VdiskJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA19017158F44D8002FF989 /* VdiskJsonWriter.m */; };
 		3FA19028158F44D8002FF989 /* VdiskBase64.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FA19019158F44D8002FF989 /* VdiskBase64.h */; };
 		3FA19029158F44D8002FF989 /* VdiskBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA1901A158F44D8002FF989 /* VdiskBase64.m */; };
 		3FA1902A158F44D8002FF989 /* VdiskBase64Defines.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FA1901B158F44D8002FF989 /* VdiskBase64Defines.h */; };
@@ -115,6 +103,8 @@
 		3FE3BF4E165CA3B200ACD976 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE3BF38165CA3B200ACD976 /* Reachability.m */; };
 		6237921F15DE3CAD00FAB428 /* VdiskComplexUpload.m in Sources */ = {isa = PBXBuildFile; fileRef = 624F7B9E15D38EFB00F0F14B /* VdiskComplexUpload.m */; };
 		6237922115DE3CB000FAB428 /* VdiskComplexUpload.h in Headers */ = {isa = PBXBuildFile; fileRef = 624F7B9D15D38EFB00F0F14B /* VdiskComplexUpload.h */; };
+		A07BD10117991D1200E1F368 /* JSONKit.h in Headers */ = {isa = PBXBuildFile; fileRef = A07BD0FF17991D1200E1F368 /* JSONKit.h */; };
+		A07BD10217991D1200E1F368 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = A07BD10017991D1200E1F368 /* JSONKit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -185,18 +175,6 @@
 		3FA18FE8158F44C8002FF989 /* VdiskSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VdiskSession.m; sourceTree = "<group>"; };
 		3FA18FE9158F44C8002FF989 /* VdiskUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VdiskUtil.h; sourceTree = "<group>"; };
 		3FA18FEA158F44C8002FF989 /* VdiskUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VdiskUtil.m; sourceTree = "<group>"; };
-		3FA1900C158F44D7002FF989 /* NSObject+VdiskJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+VdiskJSON.h"; sourceTree = "<group>"; };
-		3FA1900D158F44D7002FF989 /* NSObject+VdiskJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+VdiskJSON.m"; sourceTree = "<group>"; };
-		3FA1900E158F44D7002FF989 /* NSString+VdiskJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+VdiskJSON.h"; sourceTree = "<group>"; };
-		3FA1900F158F44D8002FF989 /* NSString+VdiskJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+VdiskJSON.m"; sourceTree = "<group>"; };
-		3FA19010158F44D8002FF989 /* VdiskJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VdiskJSON.h; sourceTree = "<group>"; };
-		3FA19011158F44D8002FF989 /* VdiskJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VdiskJSON.m; sourceTree = "<group>"; };
-		3FA19012158F44D8002FF989 /* VdiskJsonBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VdiskJsonBase.h; sourceTree = "<group>"; };
-		3FA19013158F44D8002FF989 /* VdiskJsonBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VdiskJsonBase.m; sourceTree = "<group>"; };
-		3FA19014158F44D8002FF989 /* VdiskJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VdiskJsonParser.h; sourceTree = "<group>"; };
-		3FA19015158F44D8002FF989 /* VdiskJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VdiskJsonParser.m; sourceTree = "<group>"; };
-		3FA19016158F44D8002FF989 /* VdiskJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VdiskJsonWriter.h; sourceTree = "<group>"; };
-		3FA19017158F44D8002FF989 /* VdiskJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VdiskJsonWriter.m; sourceTree = "<group>"; };
 		3FA19019158F44D8002FF989 /* VdiskBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VdiskBase64.h; sourceTree = "<group>"; };
 		3FA1901A158F44D8002FF989 /* VdiskBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VdiskBase64.m; sourceTree = "<group>"; };
 		3FA1901B158F44D8002FF989 /* VdiskBase64Defines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VdiskBase64Defines.h; sourceTree = "<group>"; };
@@ -236,6 +214,8 @@
 		3FE3BF38165CA3B200ACD976 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		624F7B9D15D38EFB00F0F14B /* VdiskComplexUpload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VdiskComplexUpload.h; sourceTree = "<group>"; };
 		624F7B9E15D38EFB00F0F14B /* VdiskComplexUpload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VdiskComplexUpload.m; sourceTree = "<group>"; };
+		A07BD0FF17991D1200E1F368 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
+		A07BD10017991D1200E1F368 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -387,18 +367,8 @@
 		3FA1900B158F44D7002FF989 /* JSON */ = {
 			isa = PBXGroup;
 			children = (
-				3FA1900C158F44D7002FF989 /* NSObject+VdiskJSON.h */,
-				3FA1900D158F44D7002FF989 /* NSObject+VdiskJSON.m */,
-				3FA1900E158F44D7002FF989 /* NSString+VdiskJSON.h */,
-				3FA1900F158F44D8002FF989 /* NSString+VdiskJSON.m */,
-				3FA19010158F44D8002FF989 /* VdiskJSON.h */,
-				3FA19011158F44D8002FF989 /* VdiskJSON.m */,
-				3FA19012158F44D8002FF989 /* VdiskJsonBase.h */,
-				3FA19013158F44D8002FF989 /* VdiskJsonBase.m */,
-				3FA19014158F44D8002FF989 /* VdiskJsonParser.h */,
-				3FA19015158F44D8002FF989 /* VdiskJsonParser.m */,
-				3FA19016158F44D8002FF989 /* VdiskJsonWriter.h */,
-				3FA19017158F44D8002FF989 /* VdiskJsonWriter.m */,
+				A07BD0FF17991D1200E1F368 /* JSONKit.h */,
+				A07BD10017991D1200E1F368 /* JSONKit.m */,
 			);
 			path = JSON;
 			sourceTree = "<group>";
@@ -500,12 +470,6 @@
 				3FA19006158F44C8002FF989 /* VdiskSDKGlobal.h in Headers */,
 				3FA19007158F44C8002FF989 /* VdiskSession.h in Headers */,
 				3FA19009158F44C8002FF989 /* VdiskUtil.h in Headers */,
-				3FA1901C158F44D8002FF989 /* NSObject+VdiskJSON.h in Headers */,
-				3FA1901E158F44D8002FF989 /* NSString+VdiskJSON.h in Headers */,
-				3FA19020158F44D8002FF989 /* VdiskJSON.h in Headers */,
-				3FA19022158F44D8002FF989 /* VdiskJsonBase.h in Headers */,
-				3FA19024158F44D8002FF989 /* VdiskJsonParser.h in Headers */,
-				3FA19026158F44D8002FF989 /* VdiskJsonWriter.h in Headers */,
 				3FA19028158F44D8002FF989 /* VdiskBase64.h in Headers */,
 				3FA1902A158F44D8002FF989 /* VdiskBase64Defines.h in Headers */,
 				3FE354CD15DCEB8300BCFD72 /* VdiskSDK-Prefix.pch in Headers */,
@@ -543,6 +507,7 @@
 				3FD1DD911698268900FD757F /* SinaWeiboRequest.h in Headers */,
 				3248543C16A2B2AA00CEE7EA /* VdiskLogDebugFormatter.h in Headers */,
 				3F35F2F516A531AF00BD21AA /* VdiskSharesCategory.h in Headers */,
+				A07BD10117991D1200E1F368 /* JSONKit.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -609,12 +574,6 @@
 				3FA19005158F44C8002FF989 /* VdiskRestClient.m in Sources */,
 				3FA19008158F44C8002FF989 /* VdiskSession.m in Sources */,
 				3FA1900A158F44C8002FF989 /* VdiskUtil.m in Sources */,
-				3FA1901D158F44D8002FF989 /* NSObject+VdiskJSON.m in Sources */,
-				3FA1901F158F44D8002FF989 /* NSString+VdiskJSON.m in Sources */,
-				3FA19021158F44D8002FF989 /* VdiskJSON.m in Sources */,
-				3FA19023158F44D8002FF989 /* VdiskJsonBase.m in Sources */,
-				3FA19025158F44D8002FF989 /* VdiskJsonParser.m in Sources */,
-				3FA19027158F44D8002FF989 /* VdiskJsonWriter.m in Sources */,
 				3FA19029158F44D8002FF989 /* VdiskBase64.m in Sources */,
 				328F93B515DD5536004E320C /* VdiskKeychain.m in Sources */,
 				6237921F15DE3CAD00FAB428 /* VdiskComplexUpload.m in Sources */,
@@ -645,6 +604,7 @@
 				3FD1DD921698268900FD757F /* SinaWeiboRequest.m in Sources */,
 				3248543D16A2B2AA00CEE7EA /* VdiskLogDebugFormatter.m in Sources */,
 				3F35F2F616A531AF00BD21AA /* VdiskSharesCategory.m in Sources */,
+				A07BD10217991D1200E1F368 /* JSONKit.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
