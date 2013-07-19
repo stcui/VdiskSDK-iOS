@@ -83,7 +83,7 @@
 
 - (NSString *)URLEncodedStringWithCFStringEncoding:(CFStringEncoding)encoding {
     
-	return [(NSString *) CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)[[self mutableCopy] autorelease], NULL, CFSTR("￼=,!$&'()*+;@?\n\"<>#\t :/"), encoding) autorelease];
+	return (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)self, NULL, CFSTR("￼=,!$&'()*+;@?\n\"<>#\t :/"), encoding));
 }
 
 - (NSString *)stringByDecodingURLFormat {
@@ -100,11 +100,10 @@
 @implementation NSString (VdiskUtil)
 
 + (NSString *)GUIDString {
-    
 	CFUUIDRef theUUID = CFUUIDCreate(NULL);
-	CFStringRef string = CFUUIDCreateString(NULL, theUUID);
+	NSString *string = (__bridge_transfer NSString *)CFUUIDCreateString(NULL, theUUID);
 	CFRelease(theUUID);
-	return [(NSString *)string autorelease];
+	return string;
 }
 
 @end

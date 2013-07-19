@@ -24,6 +24,7 @@
 #import "CLog.h"
 #import "CLogReport.h"
 #import "VdiskSDKGlobal.h"
+#import <objc/message.h>
 
 id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
 
@@ -65,7 +66,7 @@ id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
     
     if ((self = [super init])) {
     
-        _request = [aRequest retain];
+        _request = aRequest;
         [_request setDelegate:self];
         [_request setUploadProgressDelegate:self];
         
@@ -136,21 +137,15 @@ id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
     
     
     [_request clearDelegatesAndCancel];
-    [_request release], _request = nil;
+    _request = nil;
     
-    [_userInfo release];
 
-    [_xVdiskMetadataJSON release];
-    [_resultFilename release];
-    [_tempFilename release];
 
-    [_error release];
     
     /* CLog */
-    [_clog release], _clog = nil;
-    [_downloadClog release], _downloadClog = nil;
+    _clog = nil;
+    _downloadClog = nil;
     
-    [super dealloc];
 }
 
 - (void)start {
@@ -289,10 +284,10 @@ id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
 
     if (_xVdiskMetadataJSON != nil) {
         
-        [_xVdiskMetadataJSON release], _xVdiskMetadataJSON = nil;
+        _xVdiskMetadataJSON = nil;
     }
     
-    _xVdiskMetadataJSON = [[metadata dictionaryValue] retain];
+    _xVdiskMetadataJSON = [metadata dictionaryValue];
     
     [self startDownload:_request.url];
 }
@@ -324,7 +319,7 @@ id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
     
     if (!_tempFilename) {
         
-        _tempFilename = [[_resultFilename stringByAppendingString:@".download"] retain];
+        _tempFilename = [_resultFilename stringByAppendingString:@".download"];
     }
     
     
@@ -358,9 +353,9 @@ id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
     
 
     [self.request clearDelegatesAndCancel];
-    [_request release], _request = nil;
+    _request = nil;
         
-    _request = [[ASIFormDataRequest requestWithURL:url] retain];
+    _request = [ASIFormDataRequest requestWithURL:url];
 
     [_request setValidatesSecureCertificate:NO];
     [_request setDownloadDestinationPath:_resultFilename];
@@ -381,7 +376,7 @@ id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
     [_request start];
     
     /* CLog */
-    [_downloadClog release], _downloadClog = nil;
+    _downloadClog = nil;
     _downloadClog = [[CLog alloc] init];
     [_downloadClog startRecordTime];
     [_downloadClog setHttpMethod:[_request requestMethod] andUrl:[[_request url] absoluteString]];
@@ -442,13 +437,12 @@ id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
     
     if ([responseHeaders objectForKey:@"X-Vdisk-Metadata"]) {
         
-        _xVdiskMetadataJSON = [[[responseHeaders objectForKey:@"X-Vdisk-Metadata"] JSONValue] retain];
+        _xVdiskMetadataJSON = [[responseHeaders objectForKey:@"X-Vdisk-Metadata"] objectFromJSONString];
     }
     
     
     if (_requestDidReceiveResponseSelector) {
-        
-        [_target performSelector:_requestDidReceiveResponseSelector withObject:self];
+        objc_msgSend(_target, _requestDidReceiveResponseSelector, self);
     }
     
     /*
@@ -462,7 +456,7 @@ id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
         
         if (_requestWillRedirectSelector) {
             
-            id returnObject = [_target performSelector:_requestWillRedirectSelector withObject:self];
+            id returnObject = objc_msgSend(_target,_requestWillRedirectSelector);
             
             if ([returnObject isKindOfClass:[NSNumber class]]) {
                 
@@ -478,7 +472,7 @@ id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
             // Create the file here so it's created in case it's zero length
             // File is downloaded into a temporary file and then moved over when completed successfully
             
-            _tempFilename = [[_resultFilename stringByAppendingString:@".download"] retain];
+            _tempFilename = [_resultFilename stringByAppendingString:@".download"];
             
             [_request setDelegate:nil];
             
@@ -570,7 +564,7 @@ id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
          
          */
         
-        NSFileManager *fileManager = [[NSFileManager new] autorelease];
+        NSFileManager *fileManager = [NSFileManager new];
         NSError *moveError;
         
         // Check that the file size is the same as the Content-Length
@@ -599,7 +593,6 @@ id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
             // Everything's OK, move temp file over to desired file
         }
         
-        [_tempFilename release];
         
         _tempFilename = nil;
     
@@ -645,7 +638,7 @@ id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
     
 
     SEL sel = (_error && _failureSelector) ? _failureSelector : _selector;
-    [_target performSelector:sel withObject:self];
+    objc_msgSend(_target, sel, self);
     
     [kVdiskNetworkRequestDelegate networkRequestStopped];
 }
@@ -716,12 +709,11 @@ id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
         }
          */
         
-        [_tempFilename release];
         _tempFilename = nil;
     }
     
     SEL sel = _failureSelector ? _failureSelector : _selector;
-    [_target performSelector:sel withObject:self];
+    objc_msgSend(_target, sel, self);
     
     [kVdiskNetworkRequestDelegate networkRequestStopped];
     
@@ -740,8 +732,7 @@ id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
             _downloadProgress = (CGFloat)_bytesDownloaded / (CGFloat)totalSize;
             
             if (_downloadProgressSelector) {
-                
-                [_target performSelector:_downloadProgressSelector withObject:self];
+                objc_msgSend(_target, _downloadProgressSelector, self);
             }
         }
     }
@@ -764,8 +755,7 @@ id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
     _uploadProgress = newProgress;
     
     if (_uploadProgressSelector) {
-        
-        [_target performSelector:_uploadProgressSelector withObject:self];
+        objc_msgSend(_target, _uploadProgressSelector, self);
     }
 }
 
@@ -783,8 +773,7 @@ id<VdiskNetworkRequestDelegate> kVdiskNetworkRequestDelegate = nil;
     
     if (theError == _error) return;
     
-    [_error release];
-    _error = [theError retain];
+    _error = theError;
     
 	NSString *errorStr = [_error.userInfo objectForKey:@"error"];
 	

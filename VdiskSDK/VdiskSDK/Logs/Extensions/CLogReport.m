@@ -74,7 +74,7 @@ static CLogReport *kSharedLogReport = nil;
     if (self = [super init]) {
         
         _logsDirectory = [logsDirectory copy];
-        _reportURL = [kVdiskLogsReportURL retain];
+        _reportURL = kVdiskLogsReportURL;
         //_reportURL = [@"https://content.weipan.cn/2/report/new" retain];
         //_reportURL = [@"http://10.73.48.235/2/report/new" retain];
         
@@ -90,10 +90,10 @@ static CLogReport *kSharedLogReport = nil;
 
     if (kSharedLogReport != nil) {
         
-        [kSharedLogReport release], kSharedLogReport = nil;
+        kSharedLogReport = nil;
     }
     
-    kSharedLogReport = [logReport retain];
+    kSharedLogReport = logReport;
 }
 
 + (id)sharedLogReport {
@@ -146,7 +146,7 @@ static CLogReport *kSharedLogReport = nil;
              */
             
             
-            [_request release], _request = nil;
+            _request = nil;
             
             _request = [[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:_reportURL]];
             _request.delegate = self;
@@ -209,15 +209,10 @@ static CLogReport *kSharedLogReport = nil;
 
 - (void)dealloc {
 
-    [_logsDirectory release];
     
     [_request clearDelegatesAndCancel];
-    [_request release];
-    [_logFiles release];
     
-    [_reportURL release];
     
-    [super dealloc];
 }
 
 #pragma mark - ASIHTTPRequestDelegate

@@ -206,12 +206,11 @@ static NSString *kSharedClientIp = nil;
         }
         
         [log appendString:[customActionKeysAndValues componentsJoinedByString:@"\t"]];
-        [customActionKeysAndValues release];
     }
     
     
     
-    return [log autorelease];
+    return log;
 }
 
 
@@ -270,18 +269,14 @@ static NSString *kSharedClientIp = nil;
 
 + (void)setSharedClientIp:(NSString *)ip {
     
-    if (kSharedClientIp != nil) {
-        
-        [kSharedClientIp release];
-    }
     
     kSharedClientIp = [ip copy];
 }
 
 - (void)setCustomKeys:(NSArray *)keys andValues:(NSArray *)values {
 
-    self.customKeys = [[keys copy] autorelease];
-    self.customValues = [[values copy] autorelease];
+    self.customKeys = [keys copy];
+    self.customValues = [values copy];
 }
 
 - (NSString *)clientIp {
@@ -486,23 +481,6 @@ static NSString *kSharedClientIp = nil;
     }
 }
 
-- (void)dealloc {
-    
-    self.httpMethodAndUrl = nil;
-    self.httpResponseStatusCode = nil;
-    self.apiErroeCode = nil;
-    self.clientErrorCode = nil;
-    self.httpBytesUp = nil;
-    self.httpBytesDown = nil;
-    self.httpTimeRequest = nil;
-    self.httpTimeResponse = nil;
-    self.elapsed = nil;
-    self.customType = nil;
-    self.customKeys = nil;
-    self.customValues = nil;
-    
-    [super dealloc];
-}
 
 
 @end

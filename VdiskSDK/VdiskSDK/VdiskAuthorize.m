@@ -55,19 +55,18 @@
 
 - (void)dealloc {
     
-    [_appKey release], _appKey = nil;
-    [_appSecret release], _appSecret = nil;
-    [_udid release], _udid = nil;
+    _appKey = nil;
+    _appSecret = nil;
+    _udid = nil;
     
-    [_redirectURI release], _redirectURI = nil;
+    _redirectURI = nil;
     
     [_request setDelegate:nil];
     [_request disconnect];
-    [_request release], _request = nil;
+    _request = nil;
     
     _delegate = nil;
 
-    [super dealloc];
 }
 
 - (void)requestAccessTokenWithAuthorizeCode:(NSString *)code {
@@ -109,7 +108,6 @@
     [webView loadRequestWithURL:[NSURL URLWithString:urlString]];
     [webView show:YES];
     webView.authorize = self;
-    [webView release];
     
 #else
     

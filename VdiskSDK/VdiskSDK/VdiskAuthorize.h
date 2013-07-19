@@ -17,7 +17,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "VdiskSDKGlobal.h"
 #import "VdiskRequest.h"
 #import "VdiskAuthorizeWebView.h"
 
@@ -43,16 +43,16 @@ VdiskRequestDelegate> {
     NSString    *_appSecret;
     NSString    *_redirectURI;
     VdiskRequest   *_request;
-    id<VdiskAuthorizeDelegate> _delegate;
+    id<VdiskAuthorizeDelegate> __vdisk_weak _delegate;
     NSString *_udid;
 }
 
-@property (nonatomic, retain) NSString *udid;;
-@property (nonatomic, retain) NSString *appKey;
-@property (nonatomic, retain) NSString *appSecret;
-@property (nonatomic, retain) NSString *redirectURI;
-@property (nonatomic, retain) VdiskRequest *request;
-@property (nonatomic, assign) id<VdiskAuthorizeDelegate> delegate;
+@property (nonatomic, strong) NSString *udid;;
+@property (nonatomic, strong) NSString *appKey;
+@property (nonatomic, strong) NSString *appSecret;
+@property (nonatomic, strong) NSString *redirectURI;
+@property (nonatomic, strong) VdiskRequest *request;
+@property (nonatomic, vdisk_weak) id<VdiskAuthorizeDelegate> delegate;
 
 - (id)initWithAppKey:(NSString *)appKey appSecret:(NSString *)appSecret udid:(NSString *)udid;
 - (void)startAuthorize;

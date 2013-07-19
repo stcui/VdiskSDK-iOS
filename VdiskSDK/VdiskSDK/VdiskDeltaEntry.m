@@ -27,7 +27,7 @@
     
     if ((self = [super init])) {
     
-        _lowercasePath = [[array objectAtIndex:0] retain];
+        _lowercasePath = [array objectAtIndex:0];
         NSObject *maybeMetadata = [array objectAtIndex:1];
         
         if (maybeMetadata != [NSNull null]) {
@@ -39,12 +39,6 @@
     return self;
 }
 
-- (void)dealloc {
-    
-    [_lowercasePath release];
-    [_metadata release];
-    [super dealloc];
-}
 
 - (BOOL)isEqualToDeltaEntry:(VdiskDeltaEntry *)entry {
     
@@ -70,8 +64,8 @@
     
     if ((self = [super init])) {
     
-        _lowercasePath = [[coder decodeObjectForKey:@"lowercasePath"] retain];
-        _metadata = [[coder decodeObjectForKey:@"metadata"] retain];
+        _lowercasePath = [coder decodeObjectForKey:@"lowercasePath"];
+        _metadata = [coder decodeObjectForKey:@"metadata"];
     }
     
     return self;

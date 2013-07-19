@@ -146,7 +146,7 @@
             [_uploadButton setTitle:@"Cancel Upload" forState:UIControlStateNormal];
             
             [_vdiskComplexUpload cancel];
-            _vdiskComplexUpload, _vdiskComplexUpload = nil;
+            _vdiskComplexUpload = nil;
             
             _vdiskComplexUpload = [[VdiskComplexUpload alloc] initWithFile:fileName fromPath:tmpPath toPath:@"/"];
             _vdiskComplexUpload.delegate = self;

@@ -19,6 +19,7 @@
 #import <Foundation/Foundation.h>
 #import "ASIFormDataRequest.h"
 #import "VdiskMetadata.h"
+#import "VdiskSDKGlobal.h"
 
 @protocol VdiskNetworkRequestDelegate;
 
@@ -82,8 +83,8 @@
 @property (nonatomic, assign) SEL uploadProgressSelector; // To receive upload progress events set this
 @property (nonatomic, assign) SEL requestDidReceiveResponseSelector;
 @property (nonatomic, assign) SEL requestWillRedirectSelector;
-@property (nonatomic, retain) NSString *resultFilename; // The file to put the HTTP body in, otherwise body is stored in resultData
-@property (nonatomic, retain) NSDictionary *userInfo;
+@property (nonatomic, strong) NSString *resultFilename; // The file to put the HTTP body in, otherwise body is stored in resultData
+@property (nonatomic, strong) NSDictionary *userInfo;
 
 @property (nonatomic, readonly) ASIFormDataRequest *request;
 @property (nonatomic, readonly) NSDictionary *xVdiskMetadataJSON;
@@ -91,8 +92,8 @@
 @property (nonatomic, readonly) CGFloat downloadProgress;
 @property (nonatomic, readonly) CGFloat uploadProgress;
 
-@property (nonatomic, readonly) NSString *resultString;
-@property (nonatomic, readonly) NSObject *resultJSON;
+@property (vdisk_weak, nonatomic, readonly) NSString *resultString;
+@property (vdisk_weak, nonatomic, readonly) NSObject *resultJSON;
 @property (nonatomic, readonly) NSError *error;
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "VdiskSDKGlobal.h"
 
 @protocol SinaWeiboAuthorizeViewDelegate;
 
@@ -18,13 +19,13 @@
     UIActivityIndicatorView *indicatorView;
     UIInterfaceOrientation previousOrientation;
     
-    id<SinaWeiboAuthorizeViewDelegate> delegate;
+    id<SinaWeiboAuthorizeViewDelegate> __vdisk_weak delegate;
     
     NSString *appRedirectURI;
     NSDictionary *authParams;
 }
 
-@property (nonatomic, assign) id<SinaWeiboAuthorizeViewDelegate> delegate;
+@property (nonatomic, vdisk_weak) id<SinaWeiboAuthorizeViewDelegate> delegate;
 
 - (id)initWithAuthParams:(NSDictionary *)params
                 delegate:(id<SinaWeiboAuthorizeViewDelegate>)delegate;

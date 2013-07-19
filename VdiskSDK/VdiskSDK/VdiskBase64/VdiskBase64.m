@@ -288,8 +288,8 @@ VDISK_INLINE NSUInteger GuessDecodedLength(NSUInteger srcLen) {
 								 charset:kBase64EncodeChars
 								  padded:YES];
 	if (converted) {
-		result = [[[NSString alloc] initWithData:converted
-										encoding:NSASCIIStringEncoding] autorelease];
+		result = [[NSString alloc] initWithData:converted
+										encoding:NSASCIIStringEncoding];
 	}
 	return result;
 }
@@ -301,8 +301,8 @@ VDISK_INLINE NSUInteger GuessDecodedLength(NSUInteger srcLen) {
 								 charset:kBase64EncodeChars
 								  padded:YES];
 	if (converted) {
-		result = [[[NSString alloc] initWithData:converted
-										encoding:NSASCIIStringEncoding] autorelease];
+		result = [[NSString alloc] initWithData:converted
+										encoding:NSASCIIStringEncoding];
 	}
 	return result;
 }
@@ -367,8 +367,8 @@ VDISK_INLINE NSUInteger GuessDecodedLength(NSUInteger srcLen) {
 								 charset:kWebSafeBase64EncodeChars
 								  padded:padded];
 	if (converted) {
-		result = [[[NSString alloc] initWithData:converted
-										encoding:NSASCIIStringEncoding] autorelease];
+		result = [[NSString alloc] initWithData:converted
+										encoding:NSASCIIStringEncoding];
 	}
 	return result;
 }
@@ -382,8 +382,8 @@ VDISK_INLINE NSUInteger GuessDecodedLength(NSUInteger srcLen) {
 								 charset:kWebSafeBase64EncodeChars
 								  padded:padded];
 	if (converted) {
-		result = [[[NSString alloc] initWithData:converted
-										encoding:NSASCIIStringEncoding] autorelease];
+		result = [[NSString alloc] initWithData:converted
+										encoding:NSASCIIStringEncoding];
 	}
 	return result;
 }

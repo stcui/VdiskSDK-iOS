@@ -63,29 +63,26 @@
 
 - (void)dealloc {
     
-    [_udid release], _udid = nil;
+    _udid = nil;
     
-    [_url release], _url = nil;
-    [_httpMethod release], _httpMethod = nil;
-    [_params release], _params = nil;
-    [_httpHeaderFields release], _httpHeaderFields = nil;
+    _url = nil;
+    _httpMethod = nil;
+    _params = nil;
+    _httpHeaderFields = nil;
     
-    [_responseData release];
-	_responseData = nil;
     
     [_request clearDelegatesAndCancel];
-    [_request release], _request = nil;
+    _request = nil;
     
     _delegate = nil;
     
-    [super dealloc];
 }
 
 #pragma mark - VdiskRequest Public Methods
 
 + (VdiskRequest *)requestWithURL:(NSString *)url httpMethod:(NSString *)httpMethod params:(NSDictionary *)params httpHeaderFields:(NSDictionary *)httpHeaderFields udid:(NSString *)udid delegate:(id<VdiskRequestDelegate>)delegate {
     
-    VdiskRequest *request = [[[VdiskRequest alloc] init] autorelease];
+    VdiskRequest *request = [[VdiskRequest alloc] init];
     
     request.url = url;
     request.httpMethod = httpMethod;
@@ -146,7 +143,6 @@
 
 - (void)disconnect {
     
-    [_responseData release];
     _responseData = nil;
     
     [self.request clearDelegatesAndCancel];
@@ -298,7 +294,7 @@
 	if (parseError) {
         if (error != nil) {
             //*error = [self errorWithCode:kVdiskErrorCodeSDK userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%d", kVdiskSDKErrorCodeParseError] forKey:kVdiskSDKErrorCodeKey]];
-            *error = [self errorWithCode:kVdiskErrorInvalidResponse userInfo:@{@"errorMessage":[[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease]}];
+            *error = [self errorWithCode:kVdiskErrorInvalidResponse userInfo:@{@"errorMessage":[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]}];
         }
 	}
 	
@@ -348,7 +344,7 @@
 
 - (void)request:(ASIHTTPRequest *)request didReceiveResponseHeaders:(NSDictionary *)responseHeaders {
     
-    self.responseData = [[[NSMutableData alloc] init] autorelease];
+    self.responseData = [[NSMutableData alloc] init];
     
 	if ([_delegate respondsToSelector:@selector(request:didReceiveResponseHeaders:)]) {
         
@@ -362,7 +358,7 @@
     //NSLog(@"%@", request.requestHeaders);
     
     
-    NSData *data = [[[NSData alloc] initWithData:_responseData] autorelease];
+    NSData *data = [[NSData alloc] initWithData:_responseData];
     
     self.responseData = nil;
     self.request = nil;

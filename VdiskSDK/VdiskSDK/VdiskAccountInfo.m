@@ -42,38 +42,29 @@
         
         if ([[dict objectForKey:@"uid"] isKindOfClass:[NSNumber class]]) {
             
-            _userId = [[[dict objectForKey:@"uid"] stringValue] retain];
+            _userId = [[dict objectForKey:@"uid"] stringValue];
             
         } else {
             
-            _userId = [[dict objectForKey:@"uid"] retain];
+            _userId = [dict objectForKey:@"uid"];
         }
         
         if ([[dict objectForKey:@"sina_uid"] isKindOfClass:[NSNumber class]]) {
             
-            _sinaUserId = [[[dict objectForKey:@"sina_uid"] stringValue] retain];
+            _sinaUserId = [[dict objectForKey:@"sina_uid"] stringValue];
             
         } else {
             
-            _sinaUserId = [[dict objectForKey:@"sina_uid"] retain];
+            _sinaUserId = [dict objectForKey:@"sina_uid"];
         }
         
        
-        _original = [dict retain];
+        _original = dict;
     }
     
     return self;
 }
 
-- (void)dealloc {
-    
-    [_quota release];
-    [_userId release];
-    [_sinaUserId release];
-    [_original release];
-    
-    [super dealloc];
-}
 
 
 

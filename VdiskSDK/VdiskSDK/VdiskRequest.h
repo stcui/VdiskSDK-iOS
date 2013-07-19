@@ -18,7 +18,7 @@
 
 #import <Foundation/Foundation.h>
 #import "ASIFormDataRequest.h"
-
+#import "VdiskSDKGlobal.h"
 
 @protocol VdiskRequestDelegate;
 
@@ -26,14 +26,14 @@
     
 }
 
-@property (nonatomic, retain) NSString *url;
-@property (nonatomic, retain) NSString *httpMethod;
-@property (nonatomic, retain) NSDictionary *params;
-@property (nonatomic, retain) NSDictionary *httpHeaderFields;
-@property (nonatomic, assign) id<VdiskRequestDelegate> delegate;
-@property (nonatomic, retain) ASIFormDataRequest *request;
-@property (nonatomic, retain) NSMutableData *responseData;
-@property (nonatomic, retain) NSString *udid;
+@property (nonatomic, strong) NSString *url;
+@property (nonatomic, strong) NSString *httpMethod;
+@property (nonatomic, strong) NSDictionary *params;
+@property (nonatomic, strong) NSDictionary *httpHeaderFields;
+@property (nonatomic, vdisk_weak) id<VdiskRequestDelegate> delegate;
+@property (nonatomic, strong) ASIFormDataRequest *request;
+@property (nonatomic, strong) NSMutableData *responseData;
+@property (nonatomic, strong) NSString *udid;
 
 + (VdiskRequest *)requestWithURL:(NSString *)url
                       httpMethod:(NSString *)httpMethod

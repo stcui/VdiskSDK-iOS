@@ -19,23 +19,15 @@
 
     if ((self = [super init])) {
         
-        _categoryId = [[dict objectForKey:@"category_id"] retain];
-        _categoryName = [[dict objectForKey:@"category_name"] retain];
-        _categoryPid = [[dict objectForKey:@"category_pid"] retain];
+        _categoryId = [dict objectForKey:@"category_id"];
+        _categoryName = [dict objectForKey:@"category_name"];
+        _categoryPid = [dict objectForKey:@"category_pid"];
         
     }
     
     return self;
 }
 
-- (void)dealloc {
-    
-    [_categoryName release];
-    [_categoryId release];
-    [_categoryPid release];
-    
-    [super dealloc];
-}
 
 #pragma mark NSCoding methods
 
@@ -43,9 +35,9 @@
     
     if ((self = [super init])) {
         
-        _categoryId = [[coder decodeObjectForKey:@"categoryId"] retain];
-        _categoryName = [[coder decodeObjectForKey:@"categoryName"] retain];
-        _categoryPid = [[coder decodeObjectForKey:@"categoryPid"] retain];
+        _categoryId = [coder decodeObjectForKey:@"categoryId"];
+        _categoryName = [coder decodeObjectForKey:@"categoryName"];
+        _categoryPid = [coder decodeObjectForKey:@"categoryPid"];
     }
     
     return self;

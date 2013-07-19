@@ -41,7 +41,7 @@ typedef enum {
 @interface VdiskComplexUpload : NSObject <VdiskRestClientDelegate> {
     
     VdiskRestClient *_vdiskRestClient;
-    id<VdiskComplexUploadDelegate> _delegate;
+    id<VdiskComplexUploadDelegate> __vdisk_weak _delegate;
     
     NSUInteger _partNum;
     unsigned long long _fileSize;
@@ -71,7 +71,7 @@ typedef enum {
     NSMutableDictionary *_userinfo;
 }
 
-@property (nonatomic, assign) id<VdiskComplexUploadDelegate> delegate;
+@property (nonatomic, vdisk_weak) id<VdiskComplexUploadDelegate> delegate;
 @property (nonatomic, readonly) NSString *sourcePath;
 @property (nonatomic, readonly) NSString *destPath;
 @property (nonatomic, readonly) NSDate *expiresIn;

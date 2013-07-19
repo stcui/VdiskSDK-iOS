@@ -35,7 +35,7 @@ typedef enum {
 } VdiskSessionType;
 
 
-@class VdiskSession;
+@class VdiskSession, VdiskRestClient;
 
 
 @protocol VdiskSessionDelegate <NSObject>
@@ -70,48 +70,25 @@ typedef enum {
 
 
 @interface VdiskSession : NSObject <VdiskAuthorizeDelegate> {
-    
-    NSString *_appKey;
-    NSString *_appSecret;
-    NSString *_sinaUserID;
-    NSString *_userID;
-    NSString *_accessToken;
-    NSString *_refreshToken;
-    NSTimeInterval _expireTime;
-    NSString *_redirectURI;
-    NSString *_appRoot;
-    
-    // Determine whether user must log out before another logging in.
-    BOOL _isUserExclusive;
-    VdiskAuthorize *_authorize;
-    SinaWeibo *_sinaWeibo;
-    id<VdiskSessionDelegate> _delegate;
-    
-    VdiskSessionType _sessionType;
-    
-    //NSString *_weiboAccessToken;
-    
-    NSString *_udid;
-    
 }
 
 
-@property (nonatomic, retain) NSString *udid;
-@property (nonatomic, retain) NSString *appKey;
-@property (nonatomic, retain) NSString *appSecret;
-@property (nonatomic, retain) NSString *sinaUserID;
-@property (nonatomic, retain) NSString *userID;
-@property (nonatomic, retain) NSString *accessToken;
-@property (nonatomic, retain) NSString *refreshToken;
-@property (nonatomic, retain) NSString *appRoot;
+@property (nonatomic, strong) NSString *udid;
+@property (nonatomic, strong) NSString *appKey;
+@property (nonatomic, strong) NSString *appSecret;
+@property (nonatomic, strong) NSString *sinaUserID;
+@property (nonatomic, strong) NSString *userID;
+@property (nonatomic, strong) NSString *accessToken;
+@property (nonatomic, strong) NSString *refreshToken;
+@property (nonatomic, strong) NSString *appRoot;
 @property (nonatomic, assign) NSTimeInterval expireTime;
-@property (nonatomic, retain) NSString *redirectURI;
+@property (nonatomic, strong) NSString *redirectURI;
 @property (nonatomic, assign) BOOL isUserExclusive;
 @property (nonatomic, readonly) VdiskSessionType sessionType;
-@property (nonatomic, retain) VdiskAuthorize *authorize;
-@property (nonatomic, retain) SinaWeibo *sinaWeibo;
-@property (nonatomic, assign) id<VdiskSessionDelegate> delegate;
-
+@property (nonatomic, strong) VdiskAuthorize *authorize;
+@property (nonatomic, strong) SinaWeibo *sinaWeibo;
+@property (nonatomic, vdisk_weak) id<VdiskSessionDelegate> delegate;
+@property (nonatomic, strong) VdiskRestClient *restClient;
 
 // Initialize an instance with the AppKey and the AppSecret you have for your client.
 - (id)initWithAppKey:(NSString *)appKey appSecret:(NSString *)appSecret appRoot:(NSString *)appRoot;

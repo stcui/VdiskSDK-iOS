@@ -59,11 +59,11 @@
     
     if (dateFormatter == nil) {
     
-        dateFormatter = [[NSDateFormatter new] autorelease];
+        dateFormatter = [NSDateFormatter new];
         // Must set locale to ensure consistent parsing:
         // http://developer.apple.com/iphone/library/qa/qa2010/qa1480.html
         
-        dateFormatter.locale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"] autorelease];
+        dateFormatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
         dateFormatter.dateFormat = @"EEE, dd MMM yyyy HH:mm:ss Z";
         [dictionary setObject:dateFormatter forKey:dateFormatterKey];
     }
@@ -82,15 +82,15 @@
             
             if ([dict objectForKey:@"modified"]) {
                 
-                _lastModifiedDate = [[[VdiskMetadata dateFormatter] dateFromString:[dict objectForKey:@"modified"]] retain];
+                _lastModifiedDate = [[VdiskMetadata dateFormatter] dateFromString:[dict objectForKey:@"modified"]];
             }
             
             if ([dict objectForKey:@"client_mtime"]) {
                 
-                _clientMtime = [[[VdiskMetadata dateFormatter] dateFromString:[dict objectForKey:@"client_mtime"]] retain];
+                _clientMtime = [[VdiskMetadata dateFormatter] dateFromString:[dict objectForKey:@"client_mtime"]];
             }
             
-            _path = [[dict objectForKey:@"path"] retain];
+            _path = [dict objectForKey:@"path"];
             _isDirectory = [[dict objectForKey:@"is_dir"] boolValue];
             
             if ([dict objectForKey:@"contents"]) {
@@ -102,7 +102,6 @@
                     
                     VdiskMetadata *subfile = [[VdiskMetadata alloc] initWithDictionary:subfileDict];
                     [mutableContents addObject:subfile];
-                    [subfile release];
                 }
                 
                 _contents = mutableContents;
@@ -110,27 +109,27 @@
             
             if ([dict objectForKey:@"ext_info"]) {
                 
-                _extInfo = [[dict objectForKey:@"ext_info"] retain];
+                _extInfo = [dict objectForKey:@"ext_info"];
             }
             
-            _hash = [[dict objectForKey:@"hash"] retain];
-            _humanReadableSize = [[dict objectForKey:@"size"] retain];
-            _root = [[dict objectForKey:@"root"] retain];
-            _icon = [[dict objectForKey:@"icon"] retain];
-            _rev = [[dict objectForKey:@"rev"] retain];
-            _revision = [[dict objectForKey:@"revision"] retain];
+            _hash = [dict objectForKey:@"hash"];
+            _humanReadableSize = [dict objectForKey:@"size"];
+            _root = [dict objectForKey:@"root"];
+            _icon = [dict objectForKey:@"icon"];
+            _rev = [dict objectForKey:@"rev"];
+            _revision = [dict objectForKey:@"revision"];
             _isDeleted = [[dict objectForKey:@"is_deleted"] boolValue];
-            _fileMd5 = [[dict objectForKey:@"md5"] retain];
-            _fileSha1 = [[dict objectForKey:@"sha1"] retain];
+            _fileMd5 = [dict objectForKey:@"md5"];
+            _fileSha1 = [dict objectForKey:@"sha1"];
             _userinfo = [[NSMutableDictionary alloc] init];
             
             /* need_ext */
-            _shareStatus = [[dict objectForKey:@"share_status"] retain];
-            _readURL = [[dict objectForKey:@"read_url"] retain];
-            _videoMP4URL = [[dict objectForKey:@"video_mp4_url"] retain];
-            _audioMP3URL = [[dict objectForKey:@"audio_mp3_url"] retain];
-            _readThumbnail = [[dict objectForKey:@"read_thumbnail"] retain];
-            _videoThumbnail = [[dict objectForKey:@"video_thumbnail"] retain];
+            _shareStatus = [dict objectForKey:@"share_status"];
+            _readURL = [dict objectForKey:@"read_url"];
+            _videoMP4URL = [dict objectForKey:@"video_mp4_url"];
+            _audioMP3URL = [dict objectForKey:@"audio_mp3_url"];
+            _readThumbnail = [dict objectForKey:@"read_thumbnail"];
+            _videoThumbnail = [dict objectForKey:@"video_thumbnail"];
             
             
         } @catch (NSException *exception) {
@@ -145,33 +144,6 @@
     return self;
 }
 
-- (void)dealloc {
-    
-    [_lastModifiedDate release];
-    [_clientMtime release];
-    [_path release];
-    [_contents release];
-    [_hash release];
-    [_humanReadableSize release];
-    [_root release];
-    [_icon release];
-    [_rev release];
-    [_revision release];
-    [_filename release];
-    [_fileMd5 release];
-    [_fileSha1 release];
-    [_extInfo release];
-    [_userinfo release];
-    
-    [_shareStatus release];
-    [_readURL release];
-    [_videoMP4URL release];
-    [_audioMP3URL release];
-    [_readThumbnail release];
-    [_videoThumbnail release];
-    
-    [super dealloc];
-}
 
 - (BOOL)isEqual:(id)object {
     
@@ -187,7 +159,7 @@
     
     if (_filename == nil) {
         
-        _filename = [[_path lastPathComponent] retain];
+        _filename = [_path lastPathComponent];
     }
     
     return _filename;
@@ -307,7 +279,7 @@
         [dictionary setValue:_extInfo forKey:@"ext_info"];
     }
     
-    return (NSDictionary *)[dictionary autorelease];
+    return (NSDictionary *)dictionary;
 }
 
 #pragma mark NSCoding methods
@@ -318,31 +290,31 @@
     
         _thumbnailExists = [coder decodeBoolForKey:@"thumbnailExists"];
         _totalBytes = [coder decodeInt64ForKey:@"totalBytes"];
-        _lastModifiedDate = [[coder decodeObjectForKey:@"lastModifiedDate"] retain];
-        _clientMtime = [[coder decodeObjectForKey:@"clientMtime"] retain];
-        _path = [[coder decodeObjectForKey:@"path"] retain];
+        _lastModifiedDate = [coder decodeObjectForKey:@"lastModifiedDate"];
+        _clientMtime = [coder decodeObjectForKey:@"clientMtime"];
+        _path = [coder decodeObjectForKey:@"path"];
         _isDirectory = [coder decodeBoolForKey:@"isDirectory"];
-        _contents = [[coder decodeObjectForKey:@"contents"] retain];
-        _hash = [[coder decodeObjectForKey:@"hash"] retain];
-        _humanReadableSize = [[coder decodeObjectForKey:@"humanReadableSize"] retain];
-        _root = [[coder decodeObjectForKey:@"root"] retain];
-        _icon = [[coder decodeObjectForKey:@"icon"] retain];
-        _rev = [[coder decodeObjectForKey:@"rev"] retain];
-        _revision = [[coder decodeObjectForKey:@"revision"] retain];
+        _contents = [coder decodeObjectForKey:@"contents"];
+        _hash = [coder decodeObjectForKey:@"hash"];
+        _humanReadableSize = [coder decodeObjectForKey:@"humanReadableSize"];
+        _root = [coder decodeObjectForKey:@"root"];
+        _icon = [coder decodeObjectForKey:@"icon"];
+        _rev = [coder decodeObjectForKey:@"rev"];
+        _revision = [coder decodeObjectForKey:@"revision"];
         _isDeleted = [coder decodeBoolForKey:@"isDeleted"];
-        _fileMd5 = [[coder decodeObjectForKey:@"md5"] retain];
-        _fileSha1 = [[coder decodeObjectForKey:@"sha1"] retain];
-        _extInfo = [[coder decodeObjectForKey:@"extInfo"] retain];
+        _fileMd5 = [coder decodeObjectForKey:@"md5"];
+        _fileSha1 = [coder decodeObjectForKey:@"sha1"];
+        _extInfo = [coder decodeObjectForKey:@"extInfo"];
         _userinfo = [[NSMutableDictionary alloc] initWithDictionary:[coder decodeObjectForKey:@"userinfo"]];
         
         
         /* need_ext */
-        _shareStatus = [[coder decodeObjectForKey:@"shareStatus"] retain];
-        _readURL = [[coder decodeObjectForKey:@"readURL"] retain];
-        _videoMP4URL = [[coder decodeObjectForKey:@"videoMP4URL"] retain];
-        _audioMP3URL = [[coder decodeObjectForKey:@"audioMP3URL"] retain];
-        _readThumbnail = [[coder decodeObjectForKey:@"readThumbnail"] retain];
-        _videoThumbnail = [[coder decodeObjectForKey:@"videoThumbnail"] retain];
+        _shareStatus = [coder decodeObjectForKey:@"shareStatus"];
+        _readURL = [coder decodeObjectForKey:@"readURL"];
+        _videoMP4URL = [coder decodeObjectForKey:@"videoMP4URL"];
+        _audioMP3URL = [coder decodeObjectForKey:@"audioMP3URL"];
+        _readThumbnail = [coder decodeObjectForKey:@"readThumbnail"];
+        _videoThumbnail = [coder decodeObjectForKey:@"videoThumbnail"];
         
     }
     

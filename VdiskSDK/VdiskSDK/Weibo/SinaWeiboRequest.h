@@ -16,6 +16,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "VdiskSDKGlobal.h"
 
 @class SinaWeiboRequest;
 @class SinaWeibo;
@@ -34,7 +35,7 @@
 
 @interface SinaWeiboRequest : NSObject
 {
-    SinaWeibo                       *sinaweibo;//weak reference
+    SinaWeibo                       *__vdisk_weak sinaweibo;//vdisk_weak reference
     
     NSString                        *url;
     NSString                        *httpMethod;
@@ -43,14 +44,14 @@
     NSURLConnection                 *connection;
     NSMutableData                   *responseData;
     
-    id<SinaWeiboRequestDelegate>    delegate;
+    id<SinaWeiboRequestDelegate>    __vdisk_weak delegate;
 }
 
-@property (nonatomic, assign) SinaWeibo *sinaweibo;
-@property (nonatomic, retain) NSString *url;
-@property (nonatomic, retain) NSString *httpMethod;
-@property (nonatomic, retain) NSDictionary *params;
-@property (nonatomic, assign) id<SinaWeiboRequestDelegate> delegate;
+@property (nonatomic, vdisk_weak) SinaWeibo *sinaweibo;
+@property (nonatomic, strong) NSString *url;
+@property (nonatomic, strong) NSString *httpMethod;
+@property (nonatomic, strong) NSDictionary *params;
+@property (nonatomic, vdisk_weak) id<SinaWeiboRequestDelegate> delegate;
 
 + (SinaWeiboRequest *)requestWithURL:(NSString *)url 
                           httpMethod:(NSString *)httpMethod 

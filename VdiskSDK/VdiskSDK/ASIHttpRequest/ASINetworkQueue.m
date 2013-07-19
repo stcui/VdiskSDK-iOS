@@ -89,7 +89,7 @@
 	[self resetProgressDelegate:&downloadProgressDelegate];
 }
 
-- (void)resetProgressDelegate:(id *)progressDelegate
+- (void)resetProgressDelegate:(__autoreleasing id *)progressDelegate
 {
 #if !TARGET_OS_IPHONE
 	// If the uploadProgressDelegate is an NSProgressIndicator, we set its MaxValue to 1.0 so we can treat it similarly to UIProgressViews

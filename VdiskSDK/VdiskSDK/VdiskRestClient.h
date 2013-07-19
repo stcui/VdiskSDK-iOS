@@ -48,7 +48,7 @@ typedef enum {
     NSMutableDictionary *_loadRequests;
     NSMutableDictionary *_imageLoadRequests;
     NSMutableDictionary *_uploadRequests;
-    id<VdiskRestClientDelegate> _delegate;
+    id<VdiskRestClientDelegate> __vdisk_weak _delegate;
 }
 
 - (id)initWithSession:(VdiskSession *)session;
@@ -179,7 +179,7 @@ typedef enum {
 + (NSString *)humanReadableSize:(unsigned long long)length;
 + (void)signRequest:(ASIHTTPRequest *)request;
 
-@property (nonatomic, assign) id<VdiskRestClientDelegate> delegate;
+@property (nonatomic, vdisk_weak) id<VdiskRestClientDelegate> delegate;
 
 @end
 
@@ -339,7 +339,6 @@ typedef enum {
 
 - (void)restClient:(VdiskRestClient *)client calledOthersAPI:(NSString *)apiName result:(id)result;
 - (void)restClient:(VdiskRestClient *)client callOthersAPIFailedWithError:(NSError *)error apiName:(NSString *)apiName;
-
-
+- (void)restClient:(VdiskRestClient *)restClient loadedFile:(NSString *)destPath contentType:(NSString *)contentType eTag:(NSString *)eTag;
 
 @end

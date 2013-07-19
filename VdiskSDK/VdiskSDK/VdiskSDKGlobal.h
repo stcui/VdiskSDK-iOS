@@ -26,6 +26,13 @@
 #import "DDASLLogger.h"
 #import "VdiskSharesCategory.h"
 
+#if __has_feature(objc_arc_weak) 
+#define __vdisk_weak __weak
+#define vdisk_weak weak
+#else
+#define __vdisk_weak __unsafe_unretained
+#define vdisk_weak unsafe_unretained
+#endif
 /*
 #define kVdiskSDKErrorDomain           @"VdiskSDKErrorDomain"
 #define kVdiskSDKErrorCodeKey          @"VdiskSDKErrorCodeKey"

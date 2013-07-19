@@ -16,6 +16,7 @@
 //  Copyright (c) 2012 Sina Vdisk. All rights reserved.
 //
 
+#import "VdiskSDKGlobal.h"
 
 @interface VdiskMetadata : NSObject <NSCoding> {
     
@@ -76,7 +77,7 @@
 @property (nonatomic, readonly) NSString *revision; // Deprecated, use rev instead
 @property (nonatomic, readonly) NSString *rev;
 @property (nonatomic, readonly) BOOL isDeleted;
-@property (nonatomic, readonly) NSString *filename;
+@property (vdisk_weak, nonatomic, readonly) NSString *filename;
 @property (nonatomic, readonly) NSString *fileMd5;
 @property (nonatomic, readonly) NSString *fileSha1;
 @property (nonatomic, readonly) NSString *extInfo;

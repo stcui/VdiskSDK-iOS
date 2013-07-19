@@ -29,19 +29,19 @@
     NSTimeInterval _timePassedMs;
 }
 
-@property(nonatomic, retain) NSString  *httpMethodAndUrl;
-@property(nonatomic, retain) NSString  *httpResponseStatusCode;
-@property(nonatomic, retain) NSString  *apiErroeCode;
-@property(nonatomic, retain) NSString  *clientErrorCode;
-@property(nonatomic, retain) NSString  *httpBytesUp;
-@property(nonatomic, retain) NSString  *httpBytesDown;
-@property(nonatomic, retain) NSString  *httpTimeRequest;
-@property(nonatomic, retain) NSString  *httpTimeResponse;
-@property(nonatomic, retain) NSString  *elapsed;
-@property(nonatomic, retain) NSString  *customType;
+@property(nonatomic, strong) NSString  *httpMethodAndUrl;
+@property(nonatomic, strong) NSString  *httpResponseStatusCode;
+@property(nonatomic, strong) NSString  *apiErroeCode;
+@property(nonatomic, strong) NSString  *clientErrorCode;
+@property(nonatomic, strong) NSString  *httpBytesUp;
+@property(nonatomic, strong) NSString  *httpBytesDown;
+@property(nonatomic, strong) NSString  *httpTimeRequest;
+@property(nonatomic, strong) NSString  *httpTimeResponse;
+@property(nonatomic, strong) NSString  *elapsed;
+@property(nonatomic, strong) NSString  *customType;
 
-@property(nonatomic, retain) NSArray  *customKeys;
-@property(nonatomic, retain) NSArray  *customValues;
+@property(nonatomic, strong) NSArray  *customKeys;
+@property(nonatomic, strong) NSArray  *customValues;
 
 
 + (void)setSharedClientIp:(NSString *)ip;

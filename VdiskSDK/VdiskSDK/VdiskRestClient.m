@@ -29,7 +29,7 @@
 #import "JSONKit.h"
 #import "ASIFormDataRequest.h"
 #import "VdiskSharesMetadata.h"
-
+#import "NSObject+PerformOnThread.h"
 
 @interface VdiskRestClient ()
 
@@ -55,9 +55,9 @@
     
     if ((self = [super init])) {
         
-        _session = [session retain];
-        _userId = [[session userID] retain];
-        _root = [session.appRoot retain];
+        _session = session;
+        _userId = [session userID];
+        _root = session.appRoot;
         _requests = [[NSMutableSet alloc] init];
         _loadRequests = [[NSMutableDictionary alloc] init];
         _imageLoadRequests = [[NSMutableDictionary alloc] init];
@@ -105,15 +105,7 @@
     
     [self cancelAllRequests];
     
-    [_requests release];
-    [_loadRequests release];
-    [_imageLoadRequests release];
-    [_uploadRequests release];
-    [_session release];
-    [_userId release];
-    [_root release];
     
-    [super dealloc];
 }
 
 
@@ -128,7 +120,7 @@
     
     //urlRequest.url = [NSURL URLWithString:@"http://www.baidu.com/"];
     
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadMetadata:)] autorelease];
+    VdiskComplexRequest *request = [[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadMetadata:)];
     
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithObject:path forKey:@"path"];
     
@@ -192,17 +184,10 @@
         }
         
     } else {
-        
-        SEL sel = @selector(parseMetadataWithRequest:resultThread:);
-        NSMethodSignature *sig = [self methodSignatureForSelector:sel];
-        NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];
-        [inv setTarget:self];
-        [inv setSelector:sel];
-        [inv setArgument:&request atIndex:2];
-        NSThread *currentThread = [NSThread currentThread];
-        [inv setArgument:&currentThread atIndex:3];
-        [inv retainArguments];
-        [inv performSelectorInBackground:@selector(invoke) withObject:nil];
+        __unsafe_unretained __typeof(self) vdisk_weakSelf = self;
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            [vdisk_weakSelf parseMetadataWithRequest:request resultThread:[NSThread currentThread]];
+        });
     }
     
     [_requests removeObject:request];
@@ -211,23 +196,23 @@
 
 - (void)parseMetadataWithRequest:(VdiskComplexRequest *)request resultThread:(NSThread *)thread {
     
-    NSAutoreleasePool *pool = [NSAutoreleasePool new];
+    @autoreleasepool {
     
     //NSDictionary *result = (NSDictionary *)[request resultJSON];
-    NSDictionary *result = [request parseResponseAsType:[NSDictionary class]];
+        NSDictionary *result = [request parseResponseAsType:[NSDictionary class]];
+            
+        VdiskMetadata *metadata = [[VdiskMetadata alloc] initWithDictionary:result];
         
-    VdiskMetadata *metadata = [[[VdiskMetadata alloc] initWithDictionary:result] autorelease];
+        if (metadata) {
+            
+            [self performSelector:@selector(didParseMetadata:) onThread:thread withObject:metadata waitUntilDone:NO];
+        
+        } else {
+            
+            [self performSelector:@selector(parseMetadataFailedForRequest:) onThread:thread withObject:request waitUntilDone:NO];
+        }
     
-    if (metadata) {
-        
-        [self performSelector:@selector(didParseMetadata:) onThread:thread withObject:metadata waitUntilDone:NO];
-    
-    } else {
-        
-        [self performSelector:@selector(parseMetadataFailedForRequest:) onThread:thread withObject:request waitUntilDone:NO];
     }
-    
-    [pool drain];
 }
 
 
@@ -265,7 +250,7 @@
     
     ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:fullPath parameters:params method:@"POST"];
     
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadDelta:)] autorelease];
+    VdiskComplexRequest *request = [[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadDelta:)];
     
     request.userInfo = params;
     [_requests addObject:request];
@@ -284,17 +269,9 @@
         }
         
     } else {
-        
-        SEL sel = @selector(parseDeltaWithRequest:resultThread:);
-        NSMethodSignature *sig = [self methodSignatureForSelector:sel];
-        NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];
-        [inv setTarget:self];
-        [inv setSelector:sel];
-        [inv setArgument:&request atIndex:2];
-        NSThread *currentThread = [NSThread currentThread];
-        [inv setArgument:&currentThread atIndex:3];
-        [inv retainArguments];
-        [inv performSelectorInBackground:@selector(invoke) withObject:nil];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            [self parseMetadataWithRequest:request resultThread:[NSThread currentThread]];
+        });
     }
     
     [_requests removeObject:request];
@@ -315,7 +292,6 @@
                 
                 VdiskDeltaEntry *entry = [[VdiskDeltaEntry alloc] initWithArray:entryArray];
                 [entries addObject:entry];
-                [entry release];
             }
             
             BOOL reset = [[result objectForKey:@"reset"] boolValue];
@@ -325,20 +301,11 @@
             SEL sel = @selector(restClient:loadedDeltaEntries:reset:cursor:hasMore:);
             
             if ([_delegate respondsToSelector:sel]) {
-                
-                NSMethodSignature *sig = [(NSObject *)_delegate methodSignatureForSelector:sel];
-                NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];
-                [inv setTarget:_delegate];
-                [inv setSelector:sel];
-                [inv setArgument:&self atIndex:2];
-                [inv setArgument:&entries atIndex:3];
-                [inv setArgument:&reset atIndex:4];
-                [inv setArgument:&cursor atIndex:5];
-                [inv setArgument:&hasMore atIndex:6];
-                [inv retainArguments];
-                [inv performSelector:@selector(invoke) onThread:thread withObject:nil waitUntilDone:NO];
+                [(NSObject<VdiskRestClientDelegate>*)_delegate performSelector:sel
+                                  onThread:[NSThread currentThread]
+                             waitUntilDone:NO
+                               withObjects:self, entries, reset, cursor, @(hasMore)];
             }
-            
         } else {
             
             [self performSelector:@selector(parseDeltaFailedForRequest:) onThread:thread withObject:request waitUntilDone:NO];
@@ -375,7 +342,7 @@
     }
     
     ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:fullPath parameters:params];
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadFile:)] autorelease];
+    VdiskComplexRequest *request = [[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadFile:)];
     
     request.resultFilename = destPath;
     request.downloadProgressSelector = @selector(requestLoadProgress:);
@@ -432,7 +399,7 @@
             if ([_delegate respondsToSelector:@selector(restClient:loadedFileRealDownloadURL:metadata:)]) {
                 
                 NSDictionary *metadataDict = [request xVdiskMetadataJSON];
-                VdiskMetadata *metadata = [[[VdiskMetadata alloc] initWithDictionary:metadataDict] autorelease];
+                VdiskMetadata *metadata = [[VdiskMetadata alloc] initWithDictionary:metadataDict];
                 BOOL allowRedirect = [_delegate restClient:self loadedFileRealDownloadURL:[NSURL URLWithString:[headers objectForKey:@"Location"]] metadata:metadata];
                 return [NSNumber numberWithBool:allowRedirect];
             }
@@ -475,7 +442,7 @@
         
         } else if ([_delegate respondsToSelector:@selector(restClient:loadedFile:contentType:metadata:)]) {
         
-            VdiskMetadata *metadata = [[[VdiskMetadata alloc] initWithDictionary:metadataDict] autorelease];
+            VdiskMetadata *metadata = [[VdiskMetadata alloc] initWithDictionary:metadataDict];
             [_delegate restClient:self loadedFile:filename contentType:contentType metadata:metadata];
         
         } else if ([_delegate respondsToSelector:@selector(restClient:loadedFile:contentType:)]) {
@@ -486,15 +453,7 @@
         } else if ([_delegate respondsToSelector:@selector(restClient:loadedFile:contentType:eTag:)]) {
             
             // This code is for the official Vdisk client to get eTag information from the server
-            NSMethodSignature *signature = [self methodSignatureForSelector:@selector(restClient:loadedFile:contentType:eTag:)];
-            NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
-            [invocation setTarget:_delegate];
-            [invocation setSelector:@selector(restClient:loadedFile:contentType:eTag:)];
-            [invocation setArgument:&self atIndex:2];
-            [invocation setArgument:&filename atIndex:3];
-            [invocation setArgument:&contentType atIndex:4];
-            [invocation setArgument:&eTag atIndex:5];
-            [invocation invoke];
+            [_delegate restClient:self loadedFile:filename contentType:contentType eTag:eTag];
         }
     }
     
@@ -552,7 +511,7 @@
     }
     
     ASIFormDataRequest *urlRequest = [[VdiskRequest requestWithURL:sharesMetadata.url httpMethod:@"GET" params:nil httpHeaderFields:nil udid:[VdiskSession sharedSession].udid delegate:nil] finalRequest];
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadFileWithSharesMetadata:)] autorelease];
+    VdiskComplexRequest *request = [[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadFileWithSharesMetadata:)];
     
     request.resultFilename = destPath;
     request.downloadProgressSelector = @selector(requestLoadFileWithSharesMetadataProgress:);
@@ -647,8 +606,7 @@
     
     ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:fullPath parameters:params];
     
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadThumbnail:)]
-     autorelease];
+    VdiskComplexRequest *request = [[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadThumbnail:)];
     
     request.resultFilename = destinationPath;
     
@@ -683,7 +641,7 @@
         
         if ([_delegate respondsToSelector:@selector(restClient:loadedThumbnail:metadata:)]) {
         
-            VdiskMetadata *metadata = [[[VdiskMetadata alloc] initWithDictionary:metadataDict] autorelease];
+            VdiskMetadata *metadata = [[VdiskMetadata alloc] initWithDictionary:metadataDict];
             [_delegate restClient:self loadedThumbnail:filename metadata:metadata];
         
         } else if ([_delegate respondsToSelector:@selector(restClient:loadedThumbnail:)]) {
@@ -730,7 +688,7 @@
     
     ASIFormDataRequest *urlRequest = [[VdiskRequest requestWithURL:urlString httpMethod:@"GET" params:nil httpHeaderFields:nil udid:_session.udid delegate:nil] finalRequest];
     
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLocateComplexUploadHost:)] autorelease];
+    VdiskComplexRequest *request = [[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLocateComplexUploadHost:)];
     
     request.userInfo = [NSDictionary dictionaryWithObjectsAndKeys:_root, @"root", @"upload", @"action", @"complex", @"upload_type", nil];
     
@@ -797,14 +755,12 @@
     
     ASIFormDataRequest *urlRequest = [self requestWithParameters:requestParams];
     
-    [requestParams release];
     
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidInitializeComplexUpload:)] autorelease];
+    VdiskComplexRequest *request = [[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidInitializeComplexUpload:)];
     
-    request.userInfo = [[initParams mutableCopy] autorelease];
+    request.userInfo = [initParams mutableCopy];
     [(NSMutableDictionary *)request.userInfo addEntriesFromDictionary:@{@"action" : @"upload", @"upload_type" : @"complex", @"destinationPath" : path, @"uploadTotalBytes" : [size stringValue]}];
     
-    [initParams release];
     
     [_requests addObject:request];
     
@@ -832,7 +788,7 @@
         
         if ([responseDic objectForKey:@"path"] && [responseDic objectForKey:@"md5"] && [responseDic objectForKey:@"sha1"]) {
             
-            VdiskMetadata *metadata = [[[VdiskMetadata alloc] initWithDictionary:responseDic] autorelease];
+            VdiskMetadata *metadata = [[VdiskMetadata alloc] initWithDictionary:responseDic];
             
             NSString *destPath = [request.userInfo objectForKey:@"destinationPath"];
             [(NSMutableDictionary *)request.userInfo setValue:@"blitz" forKey:@"upload_type"];
@@ -871,12 +827,10 @@
                                    @"POST", @"method",
                                    params, @"params",
                                    nil];
-    [params release];
     
     ASIFormDataRequest *urlRequest = [self requestWithParameters:requestParams];
-    [requestParams release];
     
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidSignComplexUpload:)] autorelease];
+    VdiskComplexRequest *request = [[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidSignComplexUpload:)];
     
     request.userInfo = [NSMutableDictionary dictionaryWithObjectsAndKeys:uploadId, @"uploadId", uploadKey, @"uploadKey", partRange, @"partRange", nil];
     [(NSMutableDictionary *)request.userInfo addEntriesFromDictionary:@{@"action" : @"upload", @"upload_type" : @"complex"}];
@@ -929,7 +883,7 @@
     
     if ([completeParams objectForKey:@"upload_total_bytes"]) {
         
-        uploadTotalBytes = [[[completeParams objectForKey:@"upload_total_bytes"] copy] autorelease];
+        uploadTotalBytes = [[completeParams objectForKey:@"upload_total_bytes"] copy];
         [completeParams removeObjectForKey:@"upload_total_bytes"];
         
     }
@@ -940,14 +894,12 @@
                                    @"POST", @"method",
                                    completeParams, @"params",
                                    nil];
-    [completeParams release];
     
     ASIFormDataRequest *urlRequest = [self requestWithParameters:requestParams];
     [urlRequest setTimeOutSeconds:100.0f];
     
-    [requestParams release];
     
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidMergeComplexUpload:)] autorelease];
+    VdiskComplexRequest *request = [[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidMergeComplexUpload:)];
     
     request.userInfo = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                         path, @"destinationPath",
@@ -982,7 +934,7 @@
         
         NSDictionary *responseDic = result;
         
-        VdiskMetadata *metadata = [[[VdiskMetadata alloc] initWithDictionary:responseDic] autorelease];
+        VdiskMetadata *metadata = [[VdiskMetadata alloc] initWithDictionary:responseDic];
         
         NSString *destPath = [request.userInfo objectForKey:@"destinationPath"];
         
@@ -1103,7 +1055,7 @@
     [urlRequest setPostBodyFilePath:sourcePath];
     [urlRequest setTimeOutSeconds:100.0f];
     
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidUploadFile:)] autorelease];
+    VdiskComplexRequest *request = [[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidUploadFile:)];
     request.uploadProgressSelector = @selector(requestUploadProgress:);
     request.userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
                         sourcePath, @"sourcePath",
@@ -1161,7 +1113,7 @@
         
     } else {
         
-        VdiskMetadata *metadata = [[[VdiskMetadata alloc] initWithDictionary:result] autorelease];
+        VdiskMetadata *metadata = [[VdiskMetadata alloc] initWithDictionary:result];
         
         NSString *sourcePath = [request.userInfo objectForKey:@"sourcePath"];
         NSString *destPath = [request.userInfo objectForKey:@"destinationPath"];
@@ -1215,8 +1167,7 @@
     NSDictionary *params = [NSDictionary dictionaryWithObject:limitStr forKey:@"rev_limit"];
     ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:fullPath parameters:params];
     
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadRevisions:)]
-     autorelease];
+    VdiskComplexRequest *request = [[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadRevisions:)];
     
     request.userInfo = [NSDictionary dictionaryWithObjectsAndKeys:path, @"path", [NSNumber numberWithInt:limit], @"limit", nil];
     
@@ -1246,7 +1197,6 @@
         
             VdiskMetadata *metadata = [[VdiskMetadata alloc] initWithDictionary:dict];
             [revisions addObject:metadata];
-            [metadata release];
         }
         
         NSString *path = [request.userInfo objectForKey:@"path"];
@@ -1266,8 +1216,7 @@
     NSDictionary *params = [NSDictionary dictionaryWithObject:rev forKey:@"rev"];
     ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:fullPath parameters:params method:@"POST"];
     
-    VdiskComplexRequest* request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidRestoreFile:)]
-     autorelease];
+    VdiskComplexRequest* request = [[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidRestoreFile:)];
     
     request.userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
                         path, @"path",
@@ -1293,7 +1242,7 @@
         
     } else {
         
-        VdiskMetadata *metadata = [[[VdiskMetadata alloc] initWithDictionary:dict] autorelease];
+        VdiskMetadata *metadata = [[VdiskMetadata alloc] initWithDictionary:dict];
         
         if ([_delegate respondsToSelector:@selector(restClient:restoredFile:)]) {
         
@@ -1314,8 +1263,7 @@
     
     ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:@"/fileops/move" parameters:params method:@"POST"];
     
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidMovePath:)]
-     autorelease];
+    VdiskComplexRequest *request = [[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidMovePath:)];
     
     request.userInfo = params;
     
@@ -1341,7 +1289,7 @@
         
         NSDictionary *params = (NSDictionary *)request.userInfo;
         NSDictionary *result = [request parseResponseAsType:[NSDictionary class]];
-        VdiskMetadata *metadata = [[[VdiskMetadata alloc] initWithDictionary:result] autorelease];
+        VdiskMetadata *metadata = [[VdiskMetadata alloc] initWithDictionary:result];
         
         if ([_delegate respondsToSelector:@selector(restClient:movedPath:to:)]) {
             
@@ -1362,8 +1310,7 @@
     
     ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:@"/fileops/copy" parameters:params method:@"POST"];
     
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidCopyPath:)]
-     autorelease];
+    VdiskComplexRequest *request = [[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidCopyPath:)];
     
     request.userInfo = params;
     
@@ -1389,7 +1336,7 @@
         
         NSDictionary *params = (NSDictionary *)request.userInfo;
         NSDictionary *result = [request parseResponseAsType:[NSDictionary class]];
-        VdiskMetadata *metadata = [[[VdiskMetadata alloc] initWithDictionary:result] autorelease];
+        VdiskMetadata *metadata = [[VdiskMetadata alloc] initWithDictionary:result];
         
         if ([_delegate respondsToSelector:@selector(restClient:copiedPath:to:)]) {
             
@@ -1407,8 +1354,7 @@
     NSString *fullPath = [NSString stringWithFormat:@"/copy_ref/%@%@", _root, path];
     ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:fullPath parameters:nil method:@"POST"];
     
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidCreateCopyRef:)]
-     autorelease];
+    VdiskComplexRequest *request = [[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidCreateCopyRef:)];
     
     request.userInfo = userInfo;
     
@@ -1450,8 +1396,7 @@
     
     ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:@"/linkcommon/new" parameters:params method:@"POST"];
     
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidCreateCopyRefAndAccessCode:)]
-                                    autorelease];
+    VdiskComplexRequest *request = [[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidCreateCopyRefAndAccessCode:)];
     
     request.userInfo = params;
     
@@ -1494,8 +1439,7 @@
     
     ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:@"/sharefriend/new" parameters:params method:@"POST"];
     
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidCreateCopyRefToFriends:)]
-                                    autorelease];
+    VdiskComplexRequest *request = [[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidCreateCopyRefToFriends:)];
     
     request.userInfo = params;
     
@@ -1540,8 +1484,7 @@
     
     ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:@"/linkcommon/copy" parameters:params method:@"POST"];
     
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidCopyFromRefWithAccessCode:)]
-                                    autorelease];
+    VdiskComplexRequest *request = [[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidCopyFromRefWithAccessCode:)];
     
     request.userInfo = params;
     
@@ -1585,7 +1528,7 @@
                 
             } else {
                 
-                VdiskMetadata *metadata = [[[VdiskMetadata alloc] initWithDictionary:result] autorelease];
+                VdiskMetadata *metadata = [[VdiskMetadata alloc] initWithDictionary:result];
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     
@@ -1609,8 +1552,7 @@
     
     ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:@"/sharefriend/copy" parameters:params method:@"POST"];
     
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidCopyFromMyFriendRef:)]
-                                    autorelease];
+    VdiskComplexRequest *request = [[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidCopyFromMyFriendRef:)];
     
     request.userInfo = params;
     
@@ -1653,7 +1595,7 @@
                 
             } else {
                 
-                VdiskMetadata *metadata = [[[VdiskMetadata alloc] initWithDictionary:result] autorelease];
+                VdiskMetadata *metadata = [[VdiskMetadata alloc] initWithDictionary:result];
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     
@@ -1683,8 +1625,7 @@
     NSString *fullPath = [NSString stringWithFormat:@"/fileops/copy/"];
     ASIFormDataRequest* urlRequest = [self requestWithHost:kVdiskAPIHost path:fullPath parameters:params method:@"POST"];
     
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidCopyFromRef:)]
-     autorelease];
+    VdiskComplexRequest *request = [[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidCopyFromRef:)];
     
     request.userInfo = params;
     
@@ -1710,7 +1651,7 @@
         
         NSString *copyRef = [request.userInfo objectForKey:@"from_copy_ref"];
         
-        VdiskMetadata *metadata = [[[VdiskMetadata alloc] initWithDictionary:result] autorelease];
+        VdiskMetadata *metadata = [[VdiskMetadata alloc] initWithDictionary:result];
         
         if ([_delegate respondsToSelector:@selector(restClient:copiedRef:to:)]) {
         
@@ -1730,8 +1671,7 @@
     
     ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:@"/fileops/delete" parameters:params method:@"POST"];
     
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidDeletePath:)]
-     autorelease];
+    VdiskComplexRequest *request = [[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidDeletePath:)];
     
     request.userInfo = params;
     
@@ -1760,7 +1700,7 @@
         if ([_delegate respondsToSelector:@selector(restClient:deletedPath:metadata:)]) {
         
             NSString *path = [request.userInfo objectForKey:@"path"];
-            VdiskMetadata *metadata = [[[VdiskMetadata alloc] initWithDictionary:result] autorelease];
+            VdiskMetadata *metadata = [[VdiskMetadata alloc] initWithDictionary:result];
             [_delegate restClient:self deletedPath:path metadata:metadata];
         }
     }
@@ -1781,8 +1721,7 @@
     
     ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:fullPath parameters:params method:@"POST"];
     
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidCreateDirectory:)]
-     autorelease];
+    VdiskComplexRequest *request = [[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidCreateDirectory:)];
     
     request.userInfo = params;
     
@@ -1810,7 +1749,7 @@
         
         //NSDictionary *result = (NSDictionary *)[request resultJSON];
         
-        VdiskMetadata *metadata = [[[VdiskMetadata alloc] initWithDictionary:result] autorelease];
+        VdiskMetadata *metadata = [[VdiskMetadata alloc] initWithDictionary:result];
         
         if ([_delegate respondsToSelector:@selector(restClient:createdFolder:)]) {
         
@@ -1827,7 +1766,7 @@
     
     ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:@"/account/info" parameters:nil];
     
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadAccountInfo:)] autorelease];
+    VdiskComplexRequest *request = [[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadAccountInfo:)];
     
     request.userInfo = [NSDictionary dictionaryWithObjectsAndKeys:_root, @"root", nil];
     
@@ -1857,7 +1796,7 @@
         
         //NSDictionary *result = (NSDictionary *)[request resultJSON];
         
-        VdiskAccountInfo *accountInfo = [[[VdiskAccountInfo alloc] initWithDictionary:result] autorelease];
+        VdiskAccountInfo *accountInfo = [[VdiskAccountInfo alloc] initWithDictionary:result];
         
         if ([_delegate respondsToSelector:@selector(restClient:loadedAccountInfo:)]) {
          
@@ -1884,7 +1823,7 @@
     
     ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:fullPath parameters:mutableParams];
     
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidSearchPath:)] autorelease];
+    VdiskComplexRequest *request = [[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidSearchPath:)];
     
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithObjectsAndKeys:path, @"path", keyword, @"keyword", nil];
     
@@ -1935,7 +1874,6 @@
             
                 VdiskMetadata *metadata = [[VdiskMetadata alloc] initWithDictionary:dict];
                 [results addObject:metadata];
-                [metadata release];
             }
         }
         
@@ -1959,8 +1897,7 @@
     
     ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:fullPath parameters:nil method:@"POST"];
     
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadSharableLink:)]
-     autorelease];
+    VdiskComplexRequest *request = [[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadSharableLink:)];
     
     request.userInfo = [NSDictionary dictionaryWithObject:path forKey:@"path"];
     
@@ -2008,7 +1945,7 @@
     
     NSString *fullPath = [NSString stringWithFormat:@"/media/%@%@", _root, path];
     ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:fullPath parameters:mutableParams];
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadStreamableURL:)] autorelease];
+    VdiskComplexRequest *request = [[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadStreamableURL:)];
     
     
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithObject:path forKey:@"path"];
@@ -2072,9 +2009,9 @@
     [mutableParams setValue:copyRef forKey:@"from_copy_ref"];
     
     ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:@"/shareops/media" parameters:mutableParams];
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadStreamableURLFromRef:)] autorelease];
+    VdiskComplexRequest *request = [[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadStreamableURLFromRef:)];
     
-    request.userInfo = [[mutableParams mutableCopy] autorelease];
+    request.userInfo = [mutableParams mutableCopy];
     
     [_requests addObject:request];
     
@@ -2119,7 +2056,7 @@
 - (void)blitz:(NSString *)filename toPath:(NSString *)path sha1:(NSString *)sha1 size:(unsigned long long)size {
 
     NSString *destPath = [path stringByAppendingPathComponent:filename];
-    NSString *blitzInfoString = [@[@{@"sha1":sha1, @"path":destPath, @"type":@"application/octet-stream", @"size":[NSString stringWithFormat:@"%llu", size]}] JSONRepresentation];
+    NSString *blitzInfoString = [@[@{@"sha1":sha1, @"path":destPath, @"type":@"application/octet-stream", @"size":[NSString stringWithFormat:@"%llu", size]}] JSONString];
     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:blitzInfoString, @"data", _root, @"root", nil];
     
     
@@ -2131,9 +2068,8 @@
                                    nil];
     
     ASIFormDataRequest *urlRequest = [self requestWithParameters:requestParams];
-    [requestParams release];
     
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidBlitz:)] autorelease];
+    VdiskComplexRequest *request = [[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidBlitz:)];
     
     request.userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
                         sha1, @"fileSha1",
@@ -2168,7 +2104,7 @@
             
             NSDictionary *result0 = (NSDictionary *)[result objectAtIndex:0];
             
-            VdiskMetadata *metadata = [[[VdiskMetadata alloc] initWithDictionary:result0] autorelease];
+            VdiskMetadata *metadata = [[VdiskMetadata alloc] initWithDictionary:result0];
             
             if (metadata && metadata.rev && metadata.lastModifiedDate && metadata.humanReadableSize) {
                 
@@ -2260,7 +2196,7 @@
     
     ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:apiName parameters:params];
     
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadShareList:)] autorelease];
+    VdiskComplexRequest *request = [[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadShareList:)];
     
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithObject:apiName forKey:@"apiName"];
     [userInfo setValue:[NSNumber numberWithInt:type] forKey:@"shareListType"];
@@ -2318,7 +2254,7 @@
                 
                 for (NSDictionary *item in result) {
                     
-                    VdiskSharesMetadata *metadata = [[[VdiskSharesMetadata alloc] initWithDictionary:item] autorelease];
+                    VdiskSharesMetadata *metadata = [[VdiskSharesMetadata alloc] initWithDictionary:item];
                     
                     if (metadata) {
                         
@@ -2365,7 +2301,7 @@
     
     ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:apiName parameters:mutableParams];
     
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadSharesMetadata:)] autorelease];
+    VdiskComplexRequest *request = [[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadSharesMetadata:)];
     
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithObject:apiName forKey:@"apiName"];
     
@@ -2422,7 +2358,7 @@
                 
             } else {
             
-                VdiskSharesMetadata *metadata = [[[VdiskSharesMetadata alloc] initWithDictionary:result] autorelease];
+                VdiskSharesMetadata *metadata = [[VdiskSharesMetadata alloc] initWithDictionary:result];
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     
@@ -2455,7 +2391,7 @@
     
     ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:apiName parameters:mutableParams];
     
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadSharesMetadataWithAccessCode:)] autorelease];
+    VdiskComplexRequest *request = [[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadSharesMetadataWithAccessCode:)];
     
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithObject:apiName forKey:@"apiName"];
     
@@ -2509,7 +2445,7 @@
                 
             } else {
                 
-                VdiskSharesMetadata *metadata = [[[VdiskSharesMetadata alloc] initWithDictionary:result] autorelease];
+                VdiskSharesMetadata *metadata = [[VdiskSharesMetadata alloc] initWithDictionary:result];
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     
@@ -2541,7 +2477,7 @@
             
     ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:apiName parameters:mutableParams];
     
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadSharesMetadataFromMyFriend:)] autorelease];
+    VdiskComplexRequest *request = [[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadSharesMetadataFromMyFriend:)];
     
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithObject:apiName forKey:@"apiName"];
     
@@ -2595,7 +2531,7 @@
                 
             } else {
                 
-                VdiskSharesMetadata *metadata = [[[VdiskSharesMetadata alloc] initWithDictionary:result] autorelease];
+                VdiskSharesMetadata *metadata = [[VdiskSharesMetadata alloc] initWithDictionary:result];
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     
@@ -2628,7 +2564,7 @@
     
     ASIFormDataRequest *urlRequest = [self requestWithHost:kVdiskAPIHost path:apiName parameters:mutableParams];
     
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadSharesCategory:)] autorelease];
+    VdiskComplexRequest *request = [[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidLoadSharesCategory:)];
     
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithObject:apiName forKey:@"apiName"];
     
@@ -2685,7 +2621,7 @@
                     
                     if ([item isKindOfClass:[NSDictionary class]]) {
                         
-                        [list addObject:[[[VdiskSharesCategory alloc] initWithDictionary:item] autorelease]];
+                        [list addObject:[[VdiskSharesCategory alloc] initWithDictionary:item]];
                     }
                 }
                 
@@ -2720,9 +2656,9 @@
     [urlRequest addRequestHeader:@"x-vdisk-version" value:@"2"];
     
     
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidCallWeiboAPI:)] autorelease];
+    VdiskComplexRequest *request = [[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidCallWeiboAPI:)];
     
-    request.userInfo = [[mutableParams mutableCopy] autorelease];
+    request.userInfo = [mutableParams mutableCopy];
     
     [(NSMutableDictionary *)request.userInfo addEntriesFromDictionary:@{@"apiName" : apiName, @"responseType" : class}];
     
@@ -2774,9 +2710,9 @@
     [urlRequest addRequestHeader:@"x-vdisk-version" value:@"2"];
     
     
-    VdiskComplexRequest *request = [[[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidCallOthersAPI:)] autorelease];
+    VdiskComplexRequest *request = [[VdiskComplexRequest alloc] initWithRequest:urlRequest andInformTarget:self selector:@selector(requestDidCallOthersAPI:)];
     
-    request.userInfo = [[mutableParams mutableCopy] autorelease];
+    request.userInfo = [mutableParams mutableCopy];
     
     [(NSMutableDictionary *)request.userInfo addEntriesFromDictionary:@{@"apiName" : apiName, @"responseType" : class}];
     
@@ -2846,11 +2782,9 @@
         [xVdiskSortedHeaders addObject:[NSString stringWithFormat:@"%@:%@", lowerKeyString, [xVdiskHeaders objectForKey:lowerKeyString]]];
     }
     
-    [xVdiskHeaders release];
     
     NSString *xVdiskHeadersString = [xVdiskSortedHeaders componentsJoinedByString:@"\n"];
     
-    [xVdiskSortedHeaders release];
     
     
     NSURL *parsedURL = request.url;
@@ -2897,9 +2831,9 @@
     
     CFStringEncoding encoding = CFStringConvertNSStringEncodingToEncoding(NSUTF8StringEncoding);
     
-    NSString *escapedPath = (NSString *)CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)path, NULL, (CFStringRef)@":?=,!$&'()*+;[]@#~", encoding);
+    NSString *escapedPath = (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)path, NULL, (CFStringRef)@":?=,!$&'()*+;[]@#~", encoding));
     
-    return [escapedPath autorelease];
+    return escapedPath;
 }
 
 - (ASIFormDataRequest *)requestWithHost:(NSString *)host path:(NSString *)path parameters:(NSDictionary *)params {
@@ -3132,7 +3066,7 @@
                                       expiresString, @"expires", 
                                       sign, @"sign", nil];
     
-    NSString *authorization = [authorizationDic JSONRepresentation];
+    NSString *authorization = [authorizationDic JSONString];
     
     NSDictionary *requestHeaders = [NSDictionary dictionaryWithObjectsAndKeys:
                                     [VdiskSession userAgent], @"User-Agent",

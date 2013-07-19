@@ -80,32 +80,51 @@
 		3FD1DD921698268900FD757F /* SinaWeiboRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FD1DD891698268900FD757F /* SinaWeiboRequest.m */; };
 		3FE354CD15DCEB8300BCFD72 /* VdiskSDK-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 3FA18FB7158F43D1002FF989 /* VdiskSDK-Prefix.pch */; };
 		3FE3BF39165CA3B200ACD976 /* ASIAuthenticationDialog.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FE3BF23165CA3B200ACD976 /* ASIAuthenticationDialog.h */; };
-		3FE3BF3A165CA3B200ACD976 /* ASIAuthenticationDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE3BF24165CA3B200ACD976 /* ASIAuthenticationDialog.m */; };
 		3FE3BF3B165CA3B200ACD976 /* ASICacheDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FE3BF25165CA3B200ACD976 /* ASICacheDelegate.h */; };
 		3FE3BF3C165CA3B200ACD976 /* ASIDataCompressor.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FE3BF26165CA3B200ACD976 /* ASIDataCompressor.h */; };
-		3FE3BF3D165CA3B200ACD976 /* ASIDataCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE3BF27165CA3B200ACD976 /* ASIDataCompressor.m */; };
 		3FE3BF3E165CA3B200ACD976 /* ASIDataDecompressor.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FE3BF28165CA3B200ACD976 /* ASIDataDecompressor.h */; };
-		3FE3BF3F165CA3B200ACD976 /* ASIDataDecompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE3BF29165CA3B200ACD976 /* ASIDataDecompressor.m */; };
 		3FE3BF40165CA3B200ACD976 /* ASIDownloadCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FE3BF2A165CA3B200ACD976 /* ASIDownloadCache.h */; };
-		3FE3BF41165CA3B200ACD976 /* ASIDownloadCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE3BF2B165CA3B200ACD976 /* ASIDownloadCache.m */; };
 		3FE3BF42165CA3B200ACD976 /* ASIFormDataRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FE3BF2C165CA3B200ACD976 /* ASIFormDataRequest.h */; };
-		3FE3BF43165CA3B200ACD976 /* ASIFormDataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE3BF2D165CA3B200ACD976 /* ASIFormDataRequest.m */; };
 		3FE3BF44165CA3B200ACD976 /* ASIHTTPRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FE3BF2E165CA3B200ACD976 /* ASIHTTPRequest.h */; };
-		3FE3BF45165CA3B200ACD976 /* ASIHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE3BF2F165CA3B200ACD976 /* ASIHTTPRequest.m */; };
 		3FE3BF46165CA3B200ACD976 /* ASIHTTPRequestConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FE3BF30165CA3B200ACD976 /* ASIHTTPRequestConfig.h */; };
 		3FE3BF47165CA3B200ACD976 /* ASIHTTPRequestDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FE3BF31165CA3B200ACD976 /* ASIHTTPRequestDelegate.h */; };
 		3FE3BF48165CA3B200ACD976 /* ASIInputStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FE3BF32165CA3B200ACD976 /* ASIInputStream.h */; };
-		3FE3BF49165CA3B200ACD976 /* ASIInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE3BF33165CA3B200ACD976 /* ASIInputStream.m */; };
 		3FE3BF4A165CA3B200ACD976 /* ASINetworkQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FE3BF34165CA3B200ACD976 /* ASINetworkQueue.h */; };
-		3FE3BF4B165CA3B200ACD976 /* ASINetworkQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE3BF35165CA3B200ACD976 /* ASINetworkQueue.m */; };
 		3FE3BF4C165CA3B200ACD976 /* ASIProgressDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FE3BF36165CA3B200ACD976 /* ASIProgressDelegate.h */; };
 		3FE3BF4D165CA3B200ACD976 /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FE3BF37165CA3B200ACD976 /* Reachability.h */; };
-		3FE3BF4E165CA3B200ACD976 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE3BF38165CA3B200ACD976 /* Reachability.m */; };
 		6237921F15DE3CAD00FAB428 /* VdiskComplexUpload.m in Sources */ = {isa = PBXBuildFile; fileRef = 624F7B9E15D38EFB00F0F14B /* VdiskComplexUpload.m */; };
 		6237922115DE3CB000FAB428 /* VdiskComplexUpload.h in Headers */ = {isa = PBXBuildFile; fileRef = 624F7B9D15D38EFB00F0F14B /* VdiskComplexUpload.h */; };
 		A07BD10117991D1200E1F368 /* JSONKit.h in Headers */ = {isa = PBXBuildFile; fileRef = A07BD0FF17991D1200E1F368 /* JSONKit.h */; };
-		A07BD10217991D1200E1F368 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = A07BD10017991D1200E1F368 /* JSONKit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		A07BD10C179925C100E1F368 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA18FB3158F43D0002FF989 /* Foundation.framework */; };
+		A07BD111179925C100E1F368 /* nonarc.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = A07BD110179925C100E1F368 /* nonarc.h */; };
+		A07BD113179925C100E1F368 /* nonarc.m in Sources */ = {isa = PBXBuildFile; fileRef = A07BD112179925C100E1F368 /* nonarc.m */; };
+		A07BD117179925E200E1F368 /* libnonarc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A07BD10B179925C100E1F368 /* libnonarc.a */; };
+		A07BD118179925ED00E1F368 /* ASIAuthenticationDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE3BF24165CA3B200ACD976 /* ASIAuthenticationDialog.m */; };
+		A07BD119179925ED00E1F368 /* ASIDataCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE3BF27165CA3B200ACD976 /* ASIDataCompressor.m */; };
+		A07BD11A179925ED00E1F368 /* ASIDataDecompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE3BF29165CA3B200ACD976 /* ASIDataDecompressor.m */; };
+		A07BD11B179925ED00E1F368 /* ASIDownloadCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE3BF2B165CA3B200ACD976 /* ASIDownloadCache.m */; };
+		A07BD11C179925ED00E1F368 /* ASIFormDataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE3BF2D165CA3B200ACD976 /* ASIFormDataRequest.m */; };
+		A07BD11D179925ED00E1F368 /* ASIHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE3BF2F165CA3B200ACD976 /* ASIHTTPRequest.m */; };
+		A07BD11E179925ED00E1F368 /* ASIInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE3BF33165CA3B200ACD976 /* ASIInputStream.m */; };
+		A07BD11F179925ED00E1F368 /* ASINetworkQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE3BF35165CA3B200ACD976 /* ASINetworkQueue.m */; };
+		A07BD120179925ED00E1F368 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE3BF38165CA3B200ACD976 /* Reachability.m */; };
+		A07BD121179925F400E1F368 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = A07BD10017991D1200E1F368 /* JSONKit.m */; };
+		A07BD124179927F100E1F368 /* NSObject+PerformOnThread.h in Headers */ = {isa = PBXBuildFile; fileRef = A07BD122179927EF00E1F368 /* NSObject+PerformOnThread.h */; };
+		A07BD125179927F100E1F368 /* NSObject+PerformOnThread.m in Sources */ = {isa = PBXBuildFile; fileRef = A07BD123179927F000E1F368 /* NSObject+PerformOnThread.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A07BD109179925C100E1F368 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/${PRODUCT_NAME}";
+			dstSubfolderSpec = 16;
+			files = (
+				A07BD111179925C100E1F368 /* nonarc.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		3248543A16A2B2AA00CEE7EA /* VdiskLogDebugFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VdiskLogDebugFormatter.h; sourceTree = "<group>"; };
@@ -216,6 +235,12 @@
 		624F7B9E15D38EFB00F0F14B /* VdiskComplexUpload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VdiskComplexUpload.m; sourceTree = "<group>"; };
 		A07BD0FF17991D1200E1F368 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
 		A07BD10017991D1200E1F368 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
+		A07BD10B179925C100E1F368 /* libnonarc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libnonarc.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		A07BD10F179925C100E1F368 /* nonarc-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "nonarc-Prefix.pch"; sourceTree = "<group>"; };
+		A07BD110179925C100E1F368 /* nonarc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = nonarc.h; sourceTree = "<group>"; };
+		A07BD112179925C100E1F368 /* nonarc.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = nonarc.m; sourceTree = "<group>"; };
+		A07BD122179927EF00E1F368 /* NSObject+PerformOnThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+PerformOnThread.h"; sourceTree = "<group>"; };
+		A07BD123179927F000E1F368 /* NSObject+PerformOnThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+PerformOnThread.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -223,7 +248,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A07BD117179925E200E1F368 /* libnonarc.a in Frameworks */,
 				3FA18FB4158F43D0002FF989 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A07BD108179925C100E1F368 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A07BD10C179925C100E1F368 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -273,6 +307,7 @@
 			isa = PBXGroup;
 			children = (
 				3FA18FB5158F43D1002FF989 /* VdiskSDK */,
+				A07BD10D179925C100E1F368 /* nonarc */,
 				3FA18FB2158F43D0002FF989 /* Frameworks */,
 				3FA18FB1158F43D0002FF989 /* Products */,
 			);
@@ -282,6 +317,7 @@
 			isa = PBXGroup;
 			children = (
 				3FA18FB0158F43D0002FF989 /* libVdiskSDK-iOS.a */,
+				A07BD10B179925C100E1F368 /* libnonarc.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -360,6 +396,8 @@
 				3F49D6F41688429B0090B2BA /* UIDevice-Hardware.h */,
 				3F49D6F51688429B0090B2BA /* UIDevice-Hardware.m */,
 				3F6C76AE158F4B2D0046BDDF /* VdiskSDK.h */,
+				A07BD122179927EF00E1F368 /* NSObject+PerformOnThread.h */,
+				A07BD123179927F000E1F368 /* NSObject+PerformOnThread.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -448,6 +486,24 @@
 			path = ASIHttpRequest;
 			sourceTree = "<group>";
 		};
+		A07BD10D179925C100E1F368 /* nonarc */ = {
+			isa = PBXGroup;
+			children = (
+				A07BD110179925C100E1F368 /* nonarc.h */,
+				A07BD112179925C100E1F368 /* nonarc.m */,
+				A07BD10E179925C100E1F368 /* Supporting Files */,
+			);
+			path = nonarc;
+			sourceTree = "<group>";
+		};
+		A07BD10E179925C100E1F368 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				A07BD10F179925C100E1F368 /* nonarc-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -508,6 +564,7 @@
 				3248543C16A2B2AA00CEE7EA /* VdiskLogDebugFormatter.h in Headers */,
 				3F35F2F516A531AF00BD21AA /* VdiskSharesCategory.h in Headers */,
 				A07BD10117991D1200E1F368 /* JSONKit.h in Headers */,
+				A07BD124179927F100E1F368 /* NSObject+PerformOnThread.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -531,6 +588,23 @@
 			productReference = 3FA18FB0158F43D0002FF989 /* libVdiskSDK-iOS.a */;
 			productType = "com.apple.product-type.library.static";
 		};
+		A07BD10A179925C100E1F368 /* nonarc */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A07BD114179925C100E1F368 /* Build configuration list for PBXNativeTarget "nonarc" */;
+			buildPhases = (
+				A07BD107179925C100E1F368 /* Sources */,
+				A07BD108179925C100E1F368 /* Frameworks */,
+				A07BD109179925C100E1F368 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = nonarc;
+			productName = nonarc;
+			productReference = A07BD10B179925C100E1F368 /* libnonarc.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -552,6 +626,7 @@
 			projectRoot = "";
 			targets = (
 				3FA18FAF158F43D0002FF989 /* VdiskSDK-iOS */,
+				A07BD10A179925C100E1F368 /* nonarc */,
 			);
 		};
 /* End PBXProject section */
@@ -577,15 +652,6 @@
 				3FA19029158F44D8002FF989 /* VdiskBase64.m in Sources */,
 				328F93B515DD5536004E320C /* VdiskKeychain.m in Sources */,
 				6237921F15DE3CAD00FAB428 /* VdiskComplexUpload.m in Sources */,
-				3FE3BF3A165CA3B200ACD976 /* ASIAuthenticationDialog.m in Sources */,
-				3FE3BF3D165CA3B200ACD976 /* ASIDataCompressor.m in Sources */,
-				3FE3BF3F165CA3B200ACD976 /* ASIDataDecompressor.m in Sources */,
-				3FE3BF41165CA3B200ACD976 /* ASIDownloadCache.m in Sources */,
-				3FE3BF43165CA3B200ACD976 /* ASIFormDataRequest.m in Sources */,
-				3FE3BF45165CA3B200ACD976 /* ASIHTTPRequest.m in Sources */,
-				3FE3BF49165CA3B200ACD976 /* ASIInputStream.m in Sources */,
-				3FE3BF4B165CA3B200ACD976 /* ASINetworkQueue.m in Sources */,
-				3FE3BF4E165CA3B200ACD976 /* Reachability.m in Sources */,
 				3FBA43FF1682DA8E008F31CD /* VdiskSharesMetadata.m in Sources */,
 				3F49D6DE168840850090B2BA /* DDAbstractDatabaseLogger.m in Sources */,
 				3F49D6E0168840850090B2BA /* DDASLLogger.m in Sources */,
@@ -604,7 +670,25 @@
 				3FD1DD921698268900FD757F /* SinaWeiboRequest.m in Sources */,
 				3248543D16A2B2AA00CEE7EA /* VdiskLogDebugFormatter.m in Sources */,
 				3F35F2F616A531AF00BD21AA /* VdiskSharesCategory.m in Sources */,
-				A07BD10217991D1200E1F368 /* JSONKit.m in Sources */,
+				A07BD125179927F100E1F368 /* NSObject+PerformOnThread.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A07BD107179925C100E1F368 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A07BD113179925C100E1F368 /* nonarc.m in Sources */,
+				A07BD118179925ED00E1F368 /* ASIAuthenticationDialog.m in Sources */,
+				A07BD119179925ED00E1F368 /* ASIDataCompressor.m in Sources */,
+				A07BD11A179925ED00E1F368 /* ASIDataDecompressor.m in Sources */,
+				A07BD11B179925ED00E1F368 /* ASIDownloadCache.m in Sources */,
+				A07BD11C179925ED00E1F368 /* ASIFormDataRequest.m in Sources */,
+				A07BD11D179925ED00E1F368 /* ASIHTTPRequest.m in Sources */,
+				A07BD11E179925ED00E1F368 /* ASIInputStream.m in Sources */,
+				A07BD11F179925ED00E1F368 /* ASINetworkQueue.m in Sources */,
+				A07BD120179925ED00E1F368 /* Reachability.m in Sources */,
+				A07BD121179925F400E1F368 /* JSONKit.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -662,6 +746,7 @@
 		3FA18FBE158F43D1002FF989 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/VdiskSDK.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "VdiskSDK/VdiskSDK-Prefix.pch";
@@ -675,12 +760,48 @@
 		3FA18FBF158F43D1002FF989 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/VdiskSDK.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "VdiskSDK/VdiskSDK-Prefix.pch";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		A07BD115179925C100E1F368 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_WARN_EMPTY_BODY = YES;
+				DSTROOT = /tmp/nonarc.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "nonarc/nonarc-Prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		A07BD116179925C100E1F368 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_WARN_EMPTY_BODY = YES;
+				DSTROOT = /tmp/nonarc.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "nonarc/nonarc-Prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -705,6 +826,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		A07BD114179925C100E1F368 /* Build configuration list for PBXNativeTarget "nonarc" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A07BD115179925C100E1F368 /* Debug */,
+				A07BD116179925C100E1F368 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};

@@ -51,7 +51,7 @@
             
             if ([dict objectForKey:@"share_time"]) {
                 
-                _shareTime = [[[VdiskSharesMetadata dateFormatter] dateFromString:[dict objectForKey:@"share_time"]] retain];
+                _shareTime = [[VdiskSharesMetadata dateFormatter] dateFromString:[dict objectForKey:@"share_time"]];
             }
             
             if ([dict objectForKey:@"contents"]) {
@@ -63,10 +63,9 @@
                     
                     VdiskSharesMetadata *subfile = [[VdiskSharesMetadata alloc] initWithDictionary:subfileDict];
                     [mutableContents addObject:subfile];
-                    [subfile release];
                 }
                 
-                [_contents release], _contents = nil;
+                _contents = nil;
                 _contents = mutableContents;
             }
             
@@ -112,32 +111,32 @@
             _isStream = [[dict objectForKey:@"is_stream"] boolValue];
             
             
-            _appKey = [[dict objectForKey:@"app_key"] retain];
-            _uid = [[dict objectForKey:@"uid"] retain];
-            _sinaUid = [[dict objectForKey:@"sina_uid"] retain];
-            _name = [[dict objectForKey:@"name"] retain];
-            _cpRef = [[dict objectForKey:@"copy_ref"] retain];
-            _link = [[dict objectForKey:@"link"] retain];
-            _url = [[dict objectForKey:@"url"] retain];
+            _appKey = [dict objectForKey:@"app_key"];
+            _uid = [dict objectForKey:@"uid"];
+            _sinaUid = [dict objectForKey:@"sina_uid"];
+            _name = [dict objectForKey:@"name"];
+            _cpRef = [dict objectForKey:@"copy_ref"];
+            _link = [dict objectForKey:@"link"];
+            _url = [dict objectForKey:@"url"];
             
             
-            _countBrowse = [[dict objectForKey:@"count_browse"] retain];
-            _countDownload = [[dict objectForKey:@"count_download"] retain];
-            _countCopy = [[dict objectForKey:@"count_copy"] retain];
-            _countLike = [[dict objectForKey:@"count_like"] retain];
+            _countBrowse = [dict objectForKey:@"count_browse"];
+            _countDownload = [dict objectForKey:@"count_download"];
+            _countCopy = [dict objectForKey:@"count_copy"];
+            _countLike = [dict objectForKey:@"count_like"];
             
             
-            _categoryId = [[dict objectForKey:@"category_id"] retain];
-            _shareId = [[dict objectForKey:@"share_id"] retain];
-            _title = [[dict objectForKey:@"title"] retain];
-            _descriptions = [[dict objectForKey:@"description"] retain];
-            _shareType = [[dict objectForKey:@"share_type"] retain];
-            _nick = [[dict objectForKey:@"nick"] retain];
-            _price = [[dict objectForKey:@"price"] retain];
-            _degree = [[dict objectForKey:@"degree"] retain];
-            _shareAuth = [[dict objectForKey:@"share_auth"] retain];
+            _categoryId = [dict objectForKey:@"category_id"];
+            _shareId = [dict objectForKey:@"share_id"];
+            _title = [dict objectForKey:@"title"];
+            _descriptions = [dict objectForKey:@"description"];
+            _shareType = [dict objectForKey:@"share_type"];
+            _nick = [dict objectForKey:@"nick"];
+            _price = [dict objectForKey:@"price"];
+            _degree = [dict objectForKey:@"degree"];
+            _shareAuth = [dict objectForKey:@"share_auth"];
             
-            _thumbnail = [[dict objectForKey:@"thumbnail"] retain];
+            _thumbnail = [dict objectForKey:@"thumbnail"];
             
         
         } @catch (NSException *exception) {
@@ -153,36 +152,6 @@
     return self;
 }
 
-- (void)dealloc {
-    
-    [_appKey release];
-    [_uid release];
-    [_sinaUid release];
-    [_name release];
-    [_cpRef release];
-    [_link release];
-    [_url release];
-    [_shareTime release];
-    
-    [_countBrowse release];
-    [_countDownload release];
-    [_countCopy release];
-    [_countLike release];
-    
-    [_categoryId release];
-    [_shareId release];
-    [_title release];
-    [_descriptions release];
-    [_shareType release];
-    [_nick release];
-    [_price release];
-    [_degree release];
-    [_shareAuth release];
-    
-    [_thumbnail release];
-    
-    [super dealloc];
-}
 
 - (NSString *)filename {
     
@@ -248,7 +217,7 @@
         [dictionary setValue:_thumbnail forKey:@"thumbnail"];
     }
     
-    return [dictionary autorelease];
+    return dictionary;
 }
 
 - (BOOL)thumbnailExists {
@@ -273,30 +242,30 @@
         _isPreview = [coder decodeBoolForKey:@"isPreview"];
         _isStream = [coder decodeBoolForKey:@"isStream"];
         
-        _appKey = [[coder decodeObjectForKey:@"appKey"] retain];
-        _uid = [[coder decodeObjectForKey:@"uid"] retain];
-        _sinaUid = [[coder decodeObjectForKey:@"sinaUid"] retain];
-        _name = [[coder decodeObjectForKey:@"name"] retain];
-        _cpRef = [[coder decodeObjectForKey:@"cpRef"] retain];
-        _link = [[coder decodeObjectForKey:@"link"] retain];
-        _url = [[coder decodeObjectForKey:@"url"] retain];
+        _appKey = [coder decodeObjectForKey:@"appKey"];
+        _uid = [coder decodeObjectForKey:@"uid"];
+        _sinaUid = [coder decodeObjectForKey:@"sinaUid"];
+        _name = [coder decodeObjectForKey:@"name"];
+        _cpRef = [coder decodeObjectForKey:@"cpRef"];
+        _link = [coder decodeObjectForKey:@"link"];
+        _url = [coder decodeObjectForKey:@"url"];
         
-        _countBrowse = [[coder decodeObjectForKey:@"countBrowse"] retain];
-        _countDownload = [[coder decodeObjectForKey:@"countDownload"] retain];
-        _countCopy = [[coder decodeObjectForKey:@"countCopy"] retain];
-        _countLike = [[coder decodeObjectForKey:@"countLike"] retain];
+        _countBrowse = [coder decodeObjectForKey:@"countBrowse"];
+        _countDownload = [coder decodeObjectForKey:@"countDownload"];
+        _countCopy = [coder decodeObjectForKey:@"countCopy"];
+        _countLike = [coder decodeObjectForKey:@"countLike"];
         
-        _categoryId = [[coder decodeObjectForKey:@"categoryId"] retain];
-        _shareId = [[coder decodeObjectForKey:@"shareId"] retain];
-        _title = [[coder decodeObjectForKey:@"title"] retain];
-        _descriptions = [[coder decodeObjectForKey:@"descriptions"] retain];
-        _shareType = [[coder decodeObjectForKey:@"shareType"] retain];
-        _nick = [[coder decodeObjectForKey:@"nick"] retain];
-        _price = [[coder decodeObjectForKey:@"price"] retain];
-        _degree = [[coder decodeObjectForKey:@"degree"] retain];
-        _shareAuth = [[coder decodeObjectForKey:@"shareAuth"] retain];
+        _categoryId = [coder decodeObjectForKey:@"categoryId"];
+        _shareId = [coder decodeObjectForKey:@"shareId"];
+        _title = [coder decodeObjectForKey:@"title"];
+        _descriptions = [coder decodeObjectForKey:@"descriptions"];
+        _shareType = [coder decodeObjectForKey:@"shareType"];
+        _nick = [coder decodeObjectForKey:@"nick"];
+        _price = [coder decodeObjectForKey:@"price"];
+        _degree = [coder decodeObjectForKey:@"degree"];
+        _shareAuth = [coder decodeObjectForKey:@"shareAuth"];
         
-        _thumbnail = [[coder decodeObjectForKey:@"thumbnail"] retain];
+        _thumbnail = [coder decodeObjectForKey:@"thumbnail"];
     
     }
     

@@ -37,24 +37,6 @@ static VdiskSession *kVdiskSharedSession = nil;
 
 @implementation VdiskSession
 
-@synthesize appKey = _appKey;
-@synthesize appSecret = _appSecret;
-@synthesize sinaUserID = _sinaUserID;
-@synthesize userID = _userID;
-@synthesize accessToken = _accessToken;
-@synthesize refreshToken = _refreshToken;
-@synthesize expireTime = _expireTime;
-@synthesize redirectURI = _redirectURI;
-@synthesize isUserExclusive = _isUserExclusive;
-@synthesize authorize = _authorize;
-@synthesize sinaWeibo = _sinaWeibo;
-@synthesize delegate = _delegate;
-@synthesize appRoot = _appRoot;
-@synthesize sessionType = _sessionType;
-//@synthesize weiboAccessToken = _weiboAccessToken;
-@synthesize udid = _udid;
-
-
 + (VdiskSession *)sharedSession {
     
     return kVdiskSharedSession;
@@ -64,14 +46,13 @@ static VdiskSession *kVdiskSharedSession = nil;
     
     if (session == kVdiskSharedSession) return;
     
-    [kVdiskSharedSession release];
-    kVdiskSharedSession = [session retain];
+    kVdiskSharedSession = session;
     
     
     
     /* CLog */
     
-    CLog *clog = [[[CLog alloc] init] autorelease];
+    CLog *clog = [[CLog alloc] init];
     [clog setCustomType:@"user_event"];
     [clog setCustomKeys:@[@"app_launched"] andValues:@[@"-"]];
     
@@ -103,6 +84,14 @@ static VdiskSession *kVdiskSharedSession = nil;
     
 }
 
+- (VdiskRestClient *)restClient
+{
+    if (nil == _restClient) {
+        _restClient = [[VdiskRestClient alloc] initWithSession:self];
+        _restClient.delegate = self;
+    }
+    return _restClient;
+}
 
 - (NSDictionary *)requestHeadersWithAuthorization {
     
@@ -154,7 +143,7 @@ static VdiskSession *kVdiskSharedSession = nil;
 
 #ifdef DEBUG
 #if DEBUG_REQUEST_LOG
-    VdiskLogDebugFormatter *debugformatter = [[[VdiskLogDebugFormatter alloc] init] autorelease];
+    VdiskLogDebugFormatter *debugformatter = [[VdiskLogDebugFormatter alloc] init];
     //[[DDASLLogger sharedInstance] setLogFormatter:debugformatter];
     //[DDLog addLogger:[DDASLLogger sharedInstance]];
     [[DDTTYLogger sharedInstance] setLogFormatter:debugformatter];
@@ -162,10 +151,10 @@ static VdiskSession *kVdiskSharedSession = nil;
 #endif
 #endif
     
-    VdiskLogFormatter *formatter = [[[VdiskLogFormatter alloc] init] autorelease];
+    VdiskLogFormatter *formatter = [[VdiskLogFormatter alloc] init];
     
-    CompressingLogFileManager *logFileManager = [[[CompressingLogFileManager alloc] init] autorelease];
-    DDFileLogger *fileLogger = [[[DDFileLogger alloc] initWithLogFileManager:logFileManager] autorelease];
+    CompressingLogFileManager *logFileManager = [[CompressingLogFileManager alloc] init];
+    DDFileLogger *fileLogger = [[DDFileLogger alloc] initWithLogFileManager:logFileManager];
     [fileLogger setLogFormatter:formatter];
     
     fileLogger.maximumFileSize  = 1024 * 1024;
@@ -174,7 +163,7 @@ static VdiskSession *kVdiskSharedSession = nil;
     
     [DDLog addLogger:fileLogger];
     
-    CLogReport *logReport = [[[CLogReport alloc] initWithLogsDirectory:[logFileManager logsDirectory]] autorelease];
+    CLogReport *logReport = [[CLogReport alloc] initWithLogsDirectory:[logFileManager logsDirectory]];
     [CLogReport setSharedLogReport:logReport];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:[UIApplication sharedApplication]];
@@ -212,7 +201,7 @@ static VdiskSession *kVdiskSharedSession = nil;
             
         } else {
             
-            self.appRoot = [[kVdiskRootAppFolder copy] autorelease];
+            self.appRoot = [kVdiskRootAppFolder copy];
         }
         
         _sessionType = kVdiskSessionTypeDefault;
@@ -226,37 +215,36 @@ static VdiskSession *kVdiskSharedSession = nil;
 
 - (void)dealloc {
     
-    [_appKey release], _appKey = nil;
-    [_appSecret release], _appSecret = nil;
+    _appKey = nil;
+    _appSecret = nil;
     
-    [_sinaUserID release], _sinaUserID = nil;
-    [_userID release], _userID = nil;
-    [_accessToken release], _accessToken = nil;
-    [_refreshToken release], _refreshToken = nil;
-    [_appRoot release], _appRoot = nil;
-    [_redirectURI release], _redirectURI = nil;
+    _sinaUserID = nil;
+    _userID = nil;
+    _accessToken = nil;
+    _refreshToken = nil;
+    _appRoot = nil;
+    _redirectURI = nil;
     
     [_authorize setDelegate:nil];
-    [_authorize release], _authorize = nil;
+    _authorize = nil;
     
-    [_sinaWeibo release], _sinaWeibo = nil;
+    _sinaWeibo = nil;
     
     _delegate = nil;
 
-    [_udid release], _udid = nil;
+    _udid = nil;
     
-    [super dealloc];
 }
 
 - (NSString *)udid {
 
     if (_udid == nil) {
         
-        _udid = [[[NSUserDefaults standardUserDefaults] stringForKey:kGUIDKeyName] retain];
+        _udid = [[NSUserDefaults standardUserDefaults] stringForKey:kGUIDKeyName];
         
         if (_udid == nil) {
             
-            _udid = [[NSString GUIDString] retain];
+            _udid = [NSString GUIDString];
             
             [[NSUserDefaults standardUserDefaults] setObject:_udid forKey:kGUIDKeyName];
             [[NSUserDefaults standardUserDefaults] synchronize];
@@ -299,8 +287,6 @@ static VdiskSession *kVdiskSharedSession = nil;
     
     [VdiskKeychain setPasswordData:data forService:serviceName account:kVdiskKeychainAccountIdentity];
     
-    [data release];
-    [archiver release];
     
 }
 
@@ -336,7 +322,6 @@ static VdiskSession *kVdiskSharedSession = nil;
     }
     
     [unarchiver finishDecoding];
-    [unarchiver release];
     
     if (_sessionType == kVdiskSessionTypeWeiboAccessToken) {
         
@@ -387,9 +372,7 @@ static VdiskSession *kVdiskSharedSession = nil;
     self.refreshToken = refreshToken;
     self.expireTime = [[NSDate dateWithTimeIntervalSinceNow:expireTime] timeIntervalSince1970];
     
-    VdiskRestClient *restClient = [[VdiskRestClient alloc] initWithSession:self];
-    restClient.delegate = self;
-    [restClient loadAccountInfo];
+    [self.restClient loadAccountInfo];
 }
 
 - (void)link {
@@ -436,7 +419,6 @@ static VdiskSession *kVdiskSharedSession = nil;
         VdiskAuthorize *auth = [[VdiskAuthorize alloc] initWithAppKey:_appKey appSecret:_appSecret udid:self.udid];
         [auth setDelegate:self];
         self.authorize = auth;
-        [auth release];
         
         if ([_redirectURI length] > 0) {
             
@@ -468,7 +450,6 @@ static VdiskSession *kVdiskSharedSession = nil;
     VdiskAuthorize *auth = [[VdiskAuthorize alloc] initWithAppKey:_appKey appSecret:_appSecret udid:self.udid];
     [auth setDelegate:self];
     self.authorize = auth;
-    [auth release];
     
     [_authorize startAuthorizeUsingRefreshToken:_refreshToken];
 }
@@ -495,7 +476,6 @@ static VdiskSession *kVdiskSharedSession = nil;
     VdiskAuthorize *auth = [[VdiskAuthorize alloc] initWithAppKey:_appKey appSecret:_appSecret udid:self.udid];
     [auth setDelegate:self];
     self.authorize = auth;
-    [auth release];
     
     if ([_redirectURI length] > 0) {
         
@@ -631,9 +611,7 @@ static VdiskSession *kVdiskSharedSession = nil;
     }
      */
     
-    VdiskRestClient *restClient = [[VdiskRestClient alloc] initWithSession:self];
-    restClient.delegate = self;
-    [restClient loadAccountInfo];
+    [self.restClient loadAccountInfo];
     //[restClient performSelector:@selector(loadAccountInfo) withObject:nil afterDelay:0.01];
 }
 
@@ -666,8 +644,6 @@ static VdiskSession *kVdiskSharedSession = nil;
         
         [_delegate sessionLinkedSuccess:self];
     }
-    
-    [client autorelease];
 }
 
 
@@ -677,8 +653,6 @@ static VdiskSession *kVdiskSharedSession = nil;
         
         [_delegate session:self didFailToLinkWithError:error];
     }
-    
-    [client autorelease];
 }
 
 

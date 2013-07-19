@@ -77,7 +77,7 @@
         _partNum = 1;
         _isCancelled = NO;
         
-        _userinfo = [[NSMutableDictionary dictionaryWithObjectsAndKeys:_sourcePath, @"sourcePath", _destPath, @"destinationPath", nil] retain];
+        _userinfo = [NSMutableDictionary dictionaryWithObjectsAndKeys:_sourcePath, @"sourcePath", _destPath, @"destinationPath", nil];
         [_userinfo addEntriesFromDictionary:@{@"action" : @"upload", @"upload_type" : @"complex"}];
         
     }
@@ -89,35 +89,18 @@
     
     [_vdiskRestClient cancelAllRequests];
     [_vdiskRestClient setDelegate:nil];
-    [_vdiskRestClient release];
     
-    [_uploadRequest release];
-    [_fileInfoKey release];
-    [_signatures release];
-    [_error release];
     
-    [_otherParams release];
     
-    [_userinfo release];
     
-    [_fileSHA1 release];
-    [_fileMD5s release];
-    [_uploadKey release];
-    [_uploadId release];
-    [_s3host release];
-    [_expiresIn release];
-    [_destPath release];
-    [_sourcePath release];
     
-    [super dealloc];
 }
 
 - (void)_setError:(NSError *)theError {
     
     if (theError == _error) return;
     
-    [_error release];
-    _error = [theError retain];    
+    _error = theError;    
 }
 
 
@@ -139,60 +122,60 @@
 
     if (expiresIn != nil) {
         
-        [_expiresIn release], _expiresIn = nil;
+        _expiresIn = nil;
     }
     
-    _expiresIn = [expiresIn retain];
+    _expiresIn = expiresIn;
 }
 
 - (void)_setUploadId:(NSString *)uploadId {
     
     if (_uploadId != nil) {
         
-        [_uploadId release], _uploadId = nil;
+        _uploadId = nil;
     }
         
-    _uploadId = [uploadId retain];
+    _uploadId = uploadId;
 }
 
 - (void)_setUploadKey:(NSString *)uploadKey {
     
     if (_uploadId != nil) {
         
-        [_uploadKey release], _uploadKey = nil;
+        _uploadKey = nil;
     }
     
-    _uploadKey = [uploadKey retain];
+    _uploadKey = uploadKey;
 }
 
 - (void)_setS3host:(NSString *)s3host {
     
     if (_s3host != nil) {
         
-        [_s3host release], _s3host = nil;
+        _s3host = nil;
     }
     
-    _s3host = [s3host retain];
+    _s3host = s3host;
 }
 
 - (void)_setFileSHA1:(NSString *)fileSHA1 {
     
     if (_fileSHA1) {
         
-        [_fileSHA1 release], _fileSHA1 = nil;
+        _fileSHA1 = nil;
     }
 
-    _fileSHA1 = [fileSHA1 retain];
+    _fileSHA1 = fileSHA1;
 }
 
 - (void)_setFileMD5s:(NSMutableArray *)fileMD5s {
     
     if (_fileMD5s != nil) {
         
-        [_fileMD5s release], _fileMD5s = nil;
+        _fileMD5s = nil;
     }
     
-    _fileMD5s = [fileMD5s retain];
+    _fileMD5s = fileMD5s;
 }
 
 - (void)_setExpiresInSinceNow {
@@ -214,10 +197,10 @@
 
     if (_signatures != nil) {
         
-        [_signatures release], _signatures = nil;
+        _signatures = nil;
     }
     
-    _signatures = [signatures retain];
+    _signatures = signatures;
 }
 
 - (BOOL)_readFileInfo {
@@ -342,10 +325,10 @@
 - (void)_readData:(NSFileHandle *)fileHandle offset:(unsigned long long)offset length:(unsigned long long)length content:(NSData **)content {
 	
 	[fileHandle seekToFileOffset:offset];
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	NSData *data = [fileHandle readDataOfLength:[[NSNumber numberWithUnsignedLongLong:length] unsignedIntegerValue]];
-	*content = [[NSData alloc] initWithData:data];
-	[pool release];
+	@autoreleasepool {
+		NSData *data = [fileHandle readDataOfLength:[[NSNumber numberWithUnsignedLongLong:length] unsignedIntegerValue]];
+		*content = [[NSData alloc] initWithData:data];
+	}
 }
 
 - (BOOL)_createMd5s {
@@ -378,7 +361,7 @@
         
 		unsigned long long fileOffset = 0;
         
-        [self _setFileMD5s:[[[NSMutableArray alloc] initWithCapacity:_partNum] autorelease]];
+        [self _setFileMD5s:[[NSMutableArray alloc] initWithCapacity:_partNum]];
         
 		for (NSUInteger i=0; i<_partNum; i++) {
             
@@ -392,7 +375,6 @@
             
 			[self _readData:fileHandle offset:fileOffset length:readLength content:&chunkData];
 			[_fileMD5s addObject:[VdiskUtil md5WithData:chunkData]];
-			[chunkData release];
 			
 			fileOffset += readLength;
 		}
@@ -462,7 +444,6 @@
             
             [self clear];
             
-            [params release];
             
             return;
         }
@@ -471,7 +452,6 @@
         
         [_vdiskRestClient initializeComplexUpload:_destPath uploadHost:_s3host partTotal:_partNum size:[NSNumber numberWithUnsignedLongLong:fileSize] params:params];
         
-        [params release];
         
         if ([_delegate respondsToSelector:@selector(complexUpload:startedWithStatus:destPath:srcPath:)]) {
             
@@ -521,7 +501,7 @@
     if (_uploadRequest != nil) {
         
         //[_uploadRequest cancel];
-        [_uploadRequest release], _uploadRequest = nil;
+        _uploadRequest = nil;
     }
     
     if (self.pointer <= _partNum - 1) {
@@ -588,7 +568,6 @@
             NSData *chunkData = nil;
 			[self _readData:fileHandle offset:fileOffset length:readLength content:&chunkData];
             [urlRequest setPostBody:(NSMutableData *)chunkData];
-            [chunkData release];
             
             if (_isCancelled) {
                 
@@ -611,7 +590,7 @@
             _uploadRequest.uploadProgressSelector = @selector(requestUploadProgress:);
             
             [_userinfo setValue:_uploadId forKey:@"uploadId"];
-            _uploadRequest.userInfo = [[_userinfo mutableCopy] autorelease];
+            _uploadRequest.userInfo = [_userinfo mutableCopy];
             
             [_uploadRequest start];
             
@@ -704,7 +683,7 @@
 - (void)start:(BOOL)force params:(NSDictionary *)params {
     
     _force = force;
-    _otherParams = [params retain];
+    _otherParams = params;
     
     [self _start];
 }
@@ -746,19 +725,19 @@
     _isCancelled = NO;
     _force = NO;
     
-    [_fileInfoKey release], _fileInfoKey = nil;
+    _fileInfoKey = nil;
     
     _pointer = 0;
     _partNum = 1;
     
-    [_signatures release], _signatures = nil;
-    [_fileSHA1 release], _fileSHA1 = nil;
-    [_fileMD5s release], _fileMD5s = nil;
+    _signatures = nil;
+    _fileSHA1 = nil;
+    _fileMD5s = nil;
     
-    [_expiresIn release], _expiresIn = nil;
-    [_s3host release], _s3host = nil;
-    [_uploadId release], _uploadId = nil;
-    [_uploadKey release], _uploadKey = nil;
+    _expiresIn = nil;
+    _s3host = nil;
+    _uploadId = nil;
+    _uploadKey = nil;
     
     _fileSize = 0;
 }
@@ -770,7 +749,7 @@
 
 - (void)restClient:(VdiskRestClient *)client locatedComplexUploadHost:(NSString *)uploadHost {
     
-    [self _setS3host:[[uploadHost copy] autorelease]];
+    [self _setS3host:[uploadHost copy]];
     
     [self _uploadInit];
 }
@@ -794,9 +773,9 @@
         [info objectForKey:@"part_sign"] &&
         [[info objectForKey:@"part_sign"] isKindOfClass:[NSDictionary class]]) {
         
-        [self _setUploadId:[[[info objectForKey:@"upload_id"] copy] autorelease]];
-        [self _setUploadKey:[[[info objectForKey:@"upload_key"] copy] autorelease]];        
-        [self _setSignatures:(NSDictionary *)[[[info objectForKey:@"part_sign"] copy] autorelease]];
+        [self _setUploadId:[[info objectForKey:@"upload_id"] copy]];
+        [self _setUploadKey:[[info objectForKey:@"upload_key"] copy]];        
+        [self _setSignatures:(NSDictionary *)[[info objectForKey:@"part_sign"] copy]];
         
         [self _createMd5s];
         

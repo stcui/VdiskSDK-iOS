@@ -81,7 +81,7 @@
         UIImage *closeImage = [UIImage imageNamed:@"SinaWeibo.bundle/images/close.png"];
         UIColor *color = [UIColor colorWithRed:167.0/255 green:184.0/255 blue:216.0/255 alpha:1];
         //UIColor *color = [UIColor clearColor];
-        _closeButton = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
+        _closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_closeButton setImage:closeImage forState:UIControlStateNormal];
         [_closeButton setTitleColor:color forState:UIControlStateNormal];
         [_closeButton setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
@@ -104,13 +104,12 @@
     
     self.authorize = nil;
     
-    [_panelView release], _panelView = nil;
-    [_containerView release], _containerView = nil;
-    [_webView release], _webView = nil;
-    [_indicatorView release], _indicatorView = nil;
-    [_closeButton release], _closeButton = nil;
+    _panelView = nil;
+    _containerView = nil;
+    _webView = nil;
+    _indicatorView = nil;
+    _closeButton = nil;
     
-    [super dealloc];
 }
 
 #pragma mark Actions

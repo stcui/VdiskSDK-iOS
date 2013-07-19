@@ -17,7 +17,7 @@
     NSString *userID;
     NSString *accessToken;
     NSDate *expirationDate;
-    id<SinaWeiboDelegate> delegate;
+    id<SinaWeiboDelegate> __vdisk_weak delegate;
     
     NSString *appKey;
     NSString *appSecret;
@@ -34,7 +34,7 @@
 @property (nonatomic, copy) NSDate *expirationDate;
 @property (nonatomic, copy) NSString *refreshToken;
 @property (nonatomic, copy) NSString *ssoCallbackScheme;
-@property (nonatomic, assign) id<SinaWeiboDelegate> delegate;
+@property (nonatomic, vdisk_weak) id<SinaWeiboDelegate> delegate;
 
 
 - (NSString *)appKey;

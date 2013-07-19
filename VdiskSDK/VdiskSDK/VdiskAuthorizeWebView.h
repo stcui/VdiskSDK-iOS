@@ -19,6 +19,7 @@
 #if TARGET_OS_IPHONE
 
 #import <Foundation/Foundation.h>
+#import "VdiskSDKGlobal.h"
 
 @class VdiskAuthorizeWebView;
 @class VdiskAuthorize;
@@ -36,12 +37,12 @@
     UIActivityIndicatorView *_indicatorView;
 	UIWebView *_webView;
     UIInterfaceOrientation _previousOrientation;
-    id<VdiskAuthorizeWebViewDelegate> _delegate;
+    id<VdiskAuthorizeWebViewDelegate> __vdisk_weak _delegate;
     UIButton *_closeButton;
 }
 
-@property (nonatomic, assign) id<VdiskAuthorizeWebViewDelegate> delegate;
-@property (nonatomic, assign) VdiskAuthorize *authorize;
+@property (nonatomic, vdisk_weak) id<VdiskAuthorizeWebViewDelegate> delegate;
+@property (nonatomic, vdisk_weak) VdiskAuthorize *authorize;
 
 - (void)loadRequestWithURL:(NSURL *)url;
 - (void)show:(BOOL)animated;
